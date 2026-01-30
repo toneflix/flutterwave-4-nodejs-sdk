@@ -48,6 +48,13 @@ declare global {
         toCleanCase (): string;
 
         /**
+         * Convert a string to Slug Case
+         * 
+         * @returns 
+         */
+        toSlug (separator?: string): string;
+
+        /**
          * Truncate a string to n characters
          * 
          * @param n 

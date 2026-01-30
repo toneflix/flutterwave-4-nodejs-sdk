@@ -1,3 +1,5 @@
+import 'dotenv/config'
+
 String.prototype.toKebabCase = function (): string {
     return this
         .replace(/([a-z])([A-Z])/g, '$1-$2')
@@ -21,6 +23,13 @@ String.prototype.toSnakeCase = function (): string {
         .replace(/([a-z])([A-Z])/g, '$1_$2')
         .replace(/[\s-]+/g, '_')
         .toLowerCase()
+}
+
+String.prototype.toSlug = function (separator: string = '-'): string {
+    return this
+        .toSnakeCase()
+        .replace(/[/__:]+/g, '_')
+        .replace(/_/g, separator)
 }
 
 String.prototype.toTitleCase = function (): string {

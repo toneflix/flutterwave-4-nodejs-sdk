@@ -20,6 +20,8 @@ export class Http {
         private body?: any,
     ) { }
 
+
+
     setDefaultHeaders (defaults: Record<string, string>) {
         this.headers = { ...defaults, ...this.headers }
     }

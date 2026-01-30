@@ -3,10 +3,35 @@ import { FlutterwaveAuthResponse } from './Contracts/FlutterwaveResponse'
 import { Http } from './Http'
 
 export class Flutterwave {
+    /**
+     * Client ID
+     */
     private clientId: string
+
+    /**
+     * Client Secret
+     */
     private clientSecret: string
+
+    /**
+     * Encryption Key
+     */
     private encryptionKey?: string
+
+    /**
+     * Access Token
+     */
     private accessToken?: string
+
+    /**
+     * Token expiry time in seconds
+     */
+    private expiresIn = 0
+
+    /**
+     * Last token refresh time in milliseconds
+     */
+    private lastTokenRefreshTime = 0
 
     /**
      * Creates an instance of Flutterwave.
@@ -71,10 +96,35 @@ export class Flutterwave {
 
         if (data && !error) {
             this.accessToken = data.access_token
+            this.expiresIn = data.expires_in
+            this.lastTokenRefreshTime = Date.now()
 
             return data.access_token
         }
 
         throw new AccessTokenException(error!.message || 'Failed to generate access token')
+    }
+
+    /**
+     * Refreshes the access token
+     */
+    async refreshToken () {
+        await this.generateAccessToken()
+    }
+
+    /**
+     * Ensures the access token is valid, refreshes if expired or about to expire
+     */
+    async ensureTokenIsValid () {
+        const currentTime = Date.now()
+        const timeSinceLastRefresh = (currentTime - this.lastTokenRefreshTime) / 1000 // convert to seconds
+        const timeLeft = this.expiresIn - timeSinceLastRefresh
+
+        if (!this.accessToken || timeLeft < 60) {
+            /**
+             * Refresh the token if it's expired or about to expire in the next 60 seconds
+             */
+            await this.refreshToken()
+        }
     }
 }

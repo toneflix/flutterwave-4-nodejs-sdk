@@ -1,5 +1,3 @@
-import 'dotenv/config'
-
 import { describe, expect, it } from 'vitest'
 
 import { Flutterwave } from '../src/Flutterwave'
