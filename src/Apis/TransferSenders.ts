@@ -1,4 +1,12 @@
+import { Flutterwave } from '../Flutterwave'
+
 export class TransferSenders {
+    #flutterwave: Flutterwave
+
+    constructor(flutterwaveInstance: Flutterwave) {
+        this.#flutterwave = flutterwaveInstance
+    }
+
     /**
      * List transfer senders
      * 

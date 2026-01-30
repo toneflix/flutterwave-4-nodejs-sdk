@@ -1,14 +1,4 @@
-import { FlutterwaveGeneralError, FlutterwavePaymentError, FlutterwavePayoutError } from './Errors'
-
-export type FlutterwaveErrorType =
-    | keyof FlutterwaveGeneralError
-    | keyof FlutterwavePaymentError
-    | keyof FlutterwavePayoutError
-
-export type FlutterwaveErrorValue =
-    | FlutterwaveGeneralError[keyof FlutterwaveGeneralError]
-    | FlutterwavePaymentError[keyof FlutterwavePaymentError]
-    | FlutterwavePayoutError[keyof FlutterwavePayoutError]
+import { FlutterwaveErrorType, FlutterwaveErrorValue } from './Errors'
 
 export interface FlutterwaveValidationError {
     'field_name': string
@@ -16,17 +6,28 @@ export interface FlutterwaveValidationError {
 }
 
 export interface FlutterwaveErrorResponse {
-    status: 'failed',
+    status: 'failed' | 'success'
+    message?: string
     error: {
-        type: FlutterwaveErrorType,
-        code: FlutterwaveErrorValue,
+        type: FlutterwaveErrorType
+        code: FlutterwaveErrorValue
+        message: string
+    }
+}
+
+export interface FlutterwaveValidationErrorResponse {
+    status: 'failed' | 'success'
+    message?: string
+    error: {
+        type: FlutterwaveErrorType
+        code: FlutterwaveErrorValue
         message: string
         validation_errors: FlutterwaveValidationError[]
     }
 }
 
 export interface FlutterwaveSuccessResponse<T = any> {
-    status: 'success',
+    status: 'failed' | 'success'
     message: string
     data: T
 }
@@ -50,11 +51,20 @@ export type FlutterwaveResponse<T = any> = FlutterwaveSuccessResponse<T> | Flutt
 export interface UnifiedFlutterwaveResponse<T = any> {
     success: boolean
     message: string
-    data?: T
+    status?: 'failed' | 'success'
+    data: T
     error?: {
         type: FlutterwaveErrorType
         code: FlutterwaveErrorValue
         message: string
         validation_errors: FlutterwaveValidationError[]
     }
+}
+
+export interface CursorPagination {
+    next: string
+    previous: string
+    limit: number
+    total: number
+    has_more_items: boolean
 }

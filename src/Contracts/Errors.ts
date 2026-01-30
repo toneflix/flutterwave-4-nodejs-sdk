@@ -1,4 +1,4 @@
-export interface FlutterwaveGeneralError {
+export interface GeneralError {
     /**
      * The request was rejected due to invalid parameters or missing data.
      */
@@ -39,7 +39,7 @@ export interface FlutterwaveGeneralError {
     INVALID_REQUEST: '000001'
 }
 
-export interface FlutterwavePaymentError {
+export interface PaymentError {
     /**
      * The request was rejected due to invalid parameters or missing data.
      */
@@ -455,7 +455,7 @@ export interface FlutterwavePaymentError {
     VIRTUAL_ACCOUNT_IS_ALREADY_INACTIVE: '19400'
 }
 
-export interface FlutterwavePayoutError {
+export interface PayoutError {
     /**
      * The transfer amount exceeds the allowed limit.	
      * The amount you are trying to transfer exceeds the maximum allowed limit for a single transfer.
@@ -541,3 +541,13 @@ export interface FlutterwavePayoutError {
      */
     UNABLE_TO_DETERMINE_COUNTRY: '0314'
 }
+
+export type FlutterwaveErrorType =
+    | keyof GeneralError
+    | keyof PaymentError
+    | keyof PayoutError
+
+export type FlutterwaveErrorValue =
+    | GeneralError[keyof GeneralError]
+    | PaymentError[keyof PaymentError]
+    | PayoutError[keyof PayoutError]

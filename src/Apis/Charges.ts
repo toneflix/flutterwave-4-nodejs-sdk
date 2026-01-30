@@ -1,4 +1,12 @@
+import { Flutterwave } from '../Flutterwave'
+
 export class Charges {
+    #flutterwave: Flutterwave
+
+    constructor(flutterwaveInstance: Flutterwave) {
+        this.#flutterwave = flutterwaveInstance
+    }
+
     /**
      * List charges
      * 

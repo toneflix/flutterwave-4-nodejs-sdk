@@ -1,4 +1,12 @@
+import { Flutterwave } from '../Flutterwave'
+
 export class Wallets {
+    #flutterwave: Flutterwave
+
+    constructor(flutterwaveInstance: Flutterwave) {
+        this.#flutterwave = flutterwaveInstance
+    }
+
     /**
      * Verify wallet account information for a customer
      * 

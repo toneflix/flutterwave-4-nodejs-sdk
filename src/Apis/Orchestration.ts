@@ -1,4 +1,12 @@
+import { Flutterwave } from '../Flutterwave'
+
 export class Orchestration {
+    #flutterwave: Flutterwave
+
+    constructor(flutterwaveInstance: Flutterwave) {
+        this.#flutterwave = flutterwaveInstance
+    }
+
     /**
      * Create a charge with Orchestator helper
      * 

@@ -1,4 +1,12 @@
+import { Flutterwave } from '../Flutterwave'
+
 export class Transfers {
+    #flutterwave: Flutterwave
+
+    constructor(flutterwaveInstance: Flutterwave) {
+        this.#flutterwave = flutterwaveInstance
+    }
+
     /**
      * Create a transfer with ochestrator helper
      * 

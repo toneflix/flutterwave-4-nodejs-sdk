@@ -1,4 +1,12 @@
+import { Flutterwave } from '../Flutterwave'
+
 export class RateConversion {
+    #flutterwave: Flutterwave
+
+    constructor(flutterwaveInstance: Flutterwave) {
+        this.#flutterwave = flutterwaveInstance
+    }
+
     /**
      * Retrieve transfer rate for international transfers
      * @method POST

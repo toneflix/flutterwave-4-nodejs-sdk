@@ -3,10 +3,21 @@ import './utilities/global'
 import axios, { RawAxiosRequestHeaders } from 'axios'
 
 import { Builder } from './Builder'
+import { HttpException } from './Exceptions/HttpException'
 import { UnifiedFlutterwaveResponse } from './Contracts/FlutterwaveResponse'
 import { XGenericObject } from './Contracts/Interfaces'
 
 export class Http {
+    /**
+     * Bearer token
+     */
+    private static bearerToken: string
+
+    /**
+     * Debug level
+     */
+    private static debugLevel: number = 0
+
     /**
      * Creates an instance of Http.
      * 
@@ -20,10 +31,29 @@ export class Http {
         private body?: any,
     ) { }
 
+    /**
+     * Set the debug level
+     * 
+     * @param debug 
+     */
+    static setDebugLevel (level: number = 0) {
+        this.debugLevel = level ?? 0
+    }
 
+    /**
+     * Set the bearer token
+     * 
+     * @param token 
+     */
+    static setBearerToken (token: string) {
+        this.bearerToken = token
+    }
 
     setDefaultHeaders (defaults: Record<string, string>) {
         this.headers = { ...defaults, ...this.headers }
+        if (Http.bearerToken) {
+            this.headers.Authorization = `Bearer ${Http.bearerToken}`
+        }
     }
 
     getHeaders () {
@@ -59,87 +89,62 @@ export class Http {
         params?: XGenericObject,
         headers: RawAxiosRequestHeaders = {},
     ): Promise<UnifiedFlutterwaveResponse<R>> {
-
-        try {
-            const { data } = await new Http(headers)
-                .axiosApi()
-                .get<R>(url, { params })
-
-            return {
-                success: true,
-                message: 'Request successful',
-                data,
-            }
-        } catch (error: any) {
-            return {
-                success: false,
-                message: 'Request failed',
-                error: {
-                    type: ((typeof error.error === 'string' ? error.error : error.error?.type) ?? 'UNKNOWN_ERROR').toUpperCase(),
-                    code: error.error?.code ?? '000000',
-                    message: error.error?.message ?? error.error_description ?? error.message,
-                    validation_errors: error.error?.validation_errors ?? []
-                },
-            }
-        }
+        return this.send<R>(url, 'GET', undefined, headers, params)
     }
 
     /**
-     * Makes a POST request
      * 
-     * @param args 
-     * @returns 
-     */
-    static GET<R = any> (...args: Parameters<typeof Http.get>) {
-        return Http.get<R>(...args)
-    }
-
-    /**
-     * Makes a GET request
      * 
      * @param url 
      * @param headers 
      * @param params 
      * @returns 
      */
-    static async post<R = any> (
+    static async send<R = any> (
         url: string,
+        method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE',
         body?: any,
         headers: RawAxiosRequestHeaders = {},
         params?: XGenericObject,
     ): Promise<UnifiedFlutterwaveResponse<R>> {
         try {
-            const { data } = await new Http(headers)
-                .axiosApi()
-                .post<R>(url, body, { params })
+            const { data } = await new Http(headers).axiosApi()<UnifiedFlutterwaveResponse<R>>({
+                url,
+                method,
+                data: body,
+                params,
+            })
 
             return {
                 success: true,
-                message: 'Request successful',
-                data,
+                message: data.message || 'Request successful',
+                data: data.data ?? data as R,
             }
         } catch (e: any) {
             const error = (e.response?.data ?? {}) as Record<string, any>
-
-            return {
-                success: false,
-                message: 'Request failed',
-                error: {
-                    type: ((typeof error.error === 'string' ? error.error : error.error?.type) ?? 'UNKNOWN_ERROR').toUpperCase(),
-                    code: error.error?.code ?? '000000',
-                    message: error.error?.message ?? error.error_description ?? error.message,
-                    validation_errors: error.error?.validation_errors ?? []
-                },
-            }
+            throw this.exception(e.response?.status ?? 500, error || e)
         }
     }
 
     /**
-     * Makes a POST request
+     * Create an HttpException from status and error
      * 
+     * @param status 
+     * @param error 
      * @returns 
      */
-    static POST<R = any> (...args: Parameters<typeof Http.post>) {
-        return Http.post<R>(...args)
+    private static exception (status: number, error: any) {
+        return HttpException.fromCode(status, {
+            success: false,
+            message: 'Request failed',
+            status: 'failed',
+            data: undefined,
+            error: {
+                type: ((typeof error.error === 'string' ? error.error : error.error?.type) ?? 'UNKNOWN_ERROR').toUpperCase(),
+                code: error.error?.code ?? '000000',
+                message: error.error?.message ?? error.error_description ?? error.message,
+                validation_errors: error.error?.validation_errors ?? []
+            },
+        })
     }
 }

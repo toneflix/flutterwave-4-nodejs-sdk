@@ -1,8 +1,11 @@
-import { AccessTokenException } from './Exceptions/AccessTokenException'
+import { BaseApi } from './Apis/BaseApi'
+import { Builder } from './Builder'
 import { FlutterwaveAuthResponse } from './Contracts/FlutterwaveResponse'
 import { Http } from './Http'
 
 export class Flutterwave {
+    debugLevel = 0
+
     /**
      * Client ID
      */
@@ -34,6 +37,16 @@ export class Flutterwave {
     private lastTokenRefreshTime = 0
 
     /**
+     * API Instance
+     */
+    api: BaseApi
+
+    /**
+     * Builder Instance
+     */
+    builder = Builder
+
+    /**
      * Creates an instance of Flutterwave.
      * 
      * @param clientId 
@@ -48,6 +61,8 @@ export class Flutterwave {
         if (!this.clientId || !this.clientSecret) {
             throw new Error('Client ID and Client Secret are required to initialize Flutterwave instance')
         }
+
+        this.api = BaseApi.initialize(this)
     }
 
     /**
@@ -68,6 +83,18 @@ export class Flutterwave {
     }
 
     /**
+     * Set the debug level
+     * 
+     * @param level 
+     * @returns 
+     */
+    debug (level: number = 0): this {
+        this.debugLevel = level
+
+        return this
+    }
+
+    /**
      * Get the current access token
      * 
      * @returns 
@@ -82,8 +109,9 @@ export class Flutterwave {
      * @returns 
      */
     async generateAccessToken () {
-        const { data, error } = await Http.post<FlutterwaveAuthResponse>(
+        const { data } = await Http.send<FlutterwaveAuthResponse>(
             'https://idp.flutterwave.com/realms/flutterwave/protocol/openid-connect/token',
+            'POST',
             {
                 grant_type: 'client_credentials',
                 client_id: this.clientId,
@@ -94,15 +122,12 @@ export class Flutterwave {
                 'Content-Type': 'application/x-www-form-urlencoded',
             })
 
-        if (data && !error) {
-            this.accessToken = data.access_token
-            this.expiresIn = data.expires_in
-            this.lastTokenRefreshTime = Date.now()
+        this.accessToken = data.access_token
+        this.expiresIn = data.expires_in
+        this.lastTokenRefreshTime = Date.now()
+        Http.setBearerToken(this.accessToken)
 
-            return data.access_token
-        }
-
-        throw new AccessTokenException(error!.message || 'Failed to generate access token')
+        return data.access_token
     }
 
     /**
