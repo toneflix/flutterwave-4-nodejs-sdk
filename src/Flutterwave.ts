@@ -1,3 +1,4 @@
+import { AccessTokenException } from './Exceptions/AccessTokenException'
 import { FlutterwaveAuthResponse } from './Contracts/FlutterwaveResponse'
 import { Http } from './Http'
 
@@ -56,7 +57,6 @@ export class Flutterwave {
      * @returns 
      */
     async generateAccessToken () {
-        console.log(this.clientId, this.clientSecret, '---')
         const { data, error } = await Http.post<FlutterwaveAuthResponse>(
             'https://idp.flutterwave.com/realms/flutterwave/protocol/openid-connect/token',
             {
@@ -75,6 +75,6 @@ export class Flutterwave {
             return data.access_token
         }
 
-        throw new Error(error!.message || 'Failed to generate access token')
+        throw new AccessTokenException(error!.message || 'Failed to generate access token')
     }
 }

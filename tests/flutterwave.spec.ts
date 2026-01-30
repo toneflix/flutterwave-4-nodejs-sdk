@@ -15,6 +15,12 @@ describe('Flutterwave Spec', () => {
             expect(instance.getAccessToken()).toBe(token)
         })
 
+        it('should throw if the wrong credentials are provided', async () => {
+            const instance = new Flutterwave('wrong_id', 'wrong_secret')
+
+            await expect(instance.generateAccessToken()).rejects.toThrow('Invalid client or Invalid client credentials')
+        })
+
         it('should throw error if clientId and clientSecret are not provided', () => {
             process.env.CLIENT_ID = ''
             process.env.CLIENT_SECRET = ''
