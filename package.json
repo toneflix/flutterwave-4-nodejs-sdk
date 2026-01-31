@@ -42,6 +42,7 @@
   "scripts": {
     "quick:test": "pnpm vitest",
     "test": "pnpm run quick:test",
+    "coverage": "pnpm vitest --coverage",
     "lint": "eslint . --ext .ts --ext .js",
     "build": "tsdown",
     "version": "pnpm run build",
@@ -64,6 +65,7 @@
     "@faker-js/faker": "^10.2.0",
     "@swc/core": "^1.6.1",
     "@types/node": "^20.14.5",
+    "@vitest/coverage-v8": "3.2.4",
     "barrelize": "^1.7.2",
     "eslint": "^9.39.2",
     "tsx": "^4.20.3",
