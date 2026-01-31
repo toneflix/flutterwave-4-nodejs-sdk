@@ -2,7 +2,7 @@ import { defineConfig } from 'vitepress'
 
 export default defineConfig({
     title: 'Flutterwave Node.js SDK',
-    description: 'Official Flutterwave v4 API SDK for Node.js',
+    description: 'Unofficial Flutterwave v4 API SDK for Node.js',
     base: '/',
 
     themeConfig: {
