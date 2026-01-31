@@ -56,7 +56,7 @@ export class Http {
         }
     }
 
-    getHeaders () {
+    getHeaders (): RawAxiosRequestHeaders {
         return this.headers
     }
 
@@ -84,12 +84,12 @@ export class Http {
      * @param params 
      * @returns 
      */
-    static async get<R = any> (
+    static async get<R = any, M extends XGenericObject = XGenericObject> (
         url: string,
         params?: XGenericObject,
         headers: RawAxiosRequestHeaders = {},
-    ): Promise<UnifiedFlutterwaveResponse<R>> {
-        return this.send<R>(url, 'GET', undefined, headers, params)
+    ): Promise<UnifiedFlutterwaveResponse<R, M>> {
+        return this.send<R, M>(url, 'GET', undefined, headers, params)
     }
 
     /**
@@ -100,15 +100,15 @@ export class Http {
      * @param params 
      * @returns 
      */
-    static async send<R = any> (
+    static async send<R = any, M extends XGenericObject = XGenericObject> (
         url: string,
         method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE',
         body?: any,
         headers: RawAxiosRequestHeaders = {},
         params?: XGenericObject,
-    ): Promise<UnifiedFlutterwaveResponse<R>> {
+    ): Promise<UnifiedFlutterwaveResponse<R, M>> {
         try {
-            const { data } = await new Http(headers).axiosApi()<UnifiedFlutterwaveResponse<R>>({
+            const { data } = await new Http(headers).axiosApi()<UnifiedFlutterwaveResponse<R & M>>({
                 url,
                 method,
                 data: body,
@@ -119,6 +119,7 @@ export class Http {
                 success: true,
                 message: data.message || 'Request successful',
                 data: data.data ?? data as R,
+                meta: data.meta as M,
             }
         } catch (e: any) {
             const error = (e.response?.data ?? {}) as Record<string, any>
@@ -136,9 +137,10 @@ export class Http {
     private static exception (status: number, error: any) {
         return HttpException.fromCode(status, {
             success: false,
-            message: 'Request failed',
+            message: `Request failed: ${error.error?.message || 'An error occurred'}`,
             status: 'failed',
             data: undefined,
+            meta: {},
             error: {
                 type: ((typeof error.error === 'string' ? error.error : error.error?.type) ?? 'UNKNOWN_ERROR').toUpperCase(),
                 code: error.error?.code ?? '000000',

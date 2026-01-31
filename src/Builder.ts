@@ -1,7 +1,8 @@
 import './utilities/global'
 
-import { CardDetails, EncryptedCardDetails } from './Contracts/Interfaces'
+import { CardDetails, EncryptedCardDetails } from './Contracts'
 
+import { XGenericObject } from './Contracts/Interfaces'
 import { buildUrl } from './utilities/helpers'
 import crypto from 'crypto'
 
@@ -46,7 +47,7 @@ export class Builder {
      * @param type 
      * @returns 
      */
-    static buildParams (params: Record<string, string | number | boolean>, type: 'query' | 'path' = 'path') {
+    static buildParams (params: XGenericObject, type: 'query' | 'path' = 'path') {
         let built = ''
 
         if (type === 'path') {
@@ -73,7 +74,7 @@ export class Builder {
      * 
      * @returns 
      */
-    static assignParamsToUrl (url: string, params: Record<string, string | number | boolean>, type: 'query' | 'path' = 'path') {
+    static assignParamsToUrl (url: string, params: XGenericObject, type: 'query' | 'path' = 'path') {
         let builtUrl = url
 
         if (type === 'path') {
@@ -104,8 +105,8 @@ export class Builder {
      */
     static buildTargetUrl (
         path: string,
-        params: Record<string, string | number | boolean> = {},
-        queryParams: Record<string, string | number | boolean> = {}
+        params: XGenericObject = {},
+        queryParams: XGenericObject = {}
     ) {
         const url = this.buildUrl(path)
 
@@ -122,7 +123,7 @@ export class Builder {
      * @param card 
      * @returns 
      */
-    static async encryptCardDetails (card: CardDetails): Promise<EncryptedCardDetails> {
+    static async encryptCardDetails (card: CardDetails): Promise<EncryptedCardDetails & CardDetails> {
         const nonce = crypto.randomBytes(12).toString('base64').slice(0, 12)
 
         return {
@@ -131,7 +132,7 @@ export class Builder {
             encrypted_expiry_year: await this.encryptAES(card.expiry_year, process.env.ENCRYPTION_KEY!, nonce),
             encrypted_card_number: await this.encryptAES(card.card_number, process.env.ENCRYPTION_KEY!, nonce),
             encrypted_cvv: await this.encryptAES(card.cvv, process.env.ENCRYPTION_KEY!, nonce)
-        }
+        } as never
     }
 
     /**

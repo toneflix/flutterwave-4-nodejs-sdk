@@ -1,19 +1,42 @@
+import { CountryCode } from './Codes'
+
 export interface XGenericObject {
     [key: string]: any
 }
 
-export interface CardDetails {
-    expiry_month: string,
-    expiry_year: string,
-    card_number: string,
-    cvv: string
+export interface BaseListQueryParams {
+    page?: number
+    size?: number
 }
 
-export type EncryptedCardDetails = {
-    [K in keyof CardDetails as `encrypted_${K}`]: string;
-} & { nonce: string };
+export interface IAddress {
+    city: string
+    country: CountryCode
+    line1: string
+    line2: string
+    postal_code: string
+    state: string
+}
+
+export interface IPersonName {
+    first: string
+    middle?: string
+    last: string
+}
+
+export interface IPhoneNumber {
+    country_code: string
+    number: string
+}
 
 export interface WebhookValidatorOptions {
     hashAlgorithm?: 'sha256' | 'sha512' | 'sha1';
     encoding?: 'base64' | 'hex';
 }
+
+export interface NextAction {
+    type: 'redirect_url'
+    redirect_url: {
+        url: string
+    }
+} 

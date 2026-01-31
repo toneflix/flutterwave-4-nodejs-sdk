@@ -9,7 +9,10 @@
     "strict": true,
     "allowJs": true,
     "skipLibCheck": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "paths": {
+      "@toneflix/flutterwave/contracts": ["./src/Contracts/index.ts"]
+    }
   },
   "include": ["./**/*.d.ts", "./**/*", "./src/*"],
   "exclude": ["./dist", "/.node_modules"]

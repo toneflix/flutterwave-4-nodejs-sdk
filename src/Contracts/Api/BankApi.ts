@@ -1,4 +1,5 @@
 import { CountryCode } from '../Codes'
+import { IPersonName } from '../Interfaces'
 
 export interface BankApiResponse {
     id: string
@@ -14,6 +15,12 @@ export interface BankBranchApiResponse {
     bic: string
 }
 
+export interface BankAccountApiResponse {
+    bank_code: string
+    account_number: string
+    account_name: string
+}
+
 export interface GbpAccountBodyParams {
     account: {
         code: string
@@ -23,11 +30,7 @@ export interface GbpAccountBodyParams {
         business_name: string
     } | {
         type: 'individual'
-        name: {
-            first: string
-            middle?: string
-            last: string
-        }
+        name: IPersonName
     }),
     currency: 'GBP'
 }

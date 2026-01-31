@@ -1,4 +1,4 @@
-import { BankApiResponse, BankBranchApiResponse, GbpAccountBodyParams, NgnAccountBodyParams, UsdAccountBodyParams } from '../Contracts/Api/BankApi'
+import { BankAccountApiResponse, BankApiResponse, BankBranchApiResponse, GbpAccountBodyParams, NgnAccountBodyParams, UsdAccountBodyParams } from '../Contracts/Api/BankApi'
 
 import { CountryCode } from '../Contracts/Codes'
 import { Flutterwave } from '../Flutterwave'
@@ -44,7 +44,7 @@ export class Banks {
         await this.#flutterwave.ensureTokenIsValid()
 
         const { data } = await Http.send<BankBranchApiResponse[]>(
-            this.#flutterwave.builder.buildTargetUrl('/banks/{id}/branches', { id }, {}),
+            this.#flutterwave.builder.buildTargetUrl('/banks/{id}/branches', { id }),
             'GET',
             {},
             { 'X-Trace-Id': traceId }
@@ -58,13 +58,13 @@ export class Banks {
      * 
      * @method POST
      */
-    async resolve (params: GbpAccountBodyParams, traceId?: string): Promise<any>
-    async resolve (params: NgnAccountBodyParams, traceId?: string): Promise<any>
-    async resolve (params: UsdAccountBodyParams, traceId?: string): Promise<any>
+    async resolve (params: GbpAccountBodyParams, traceId?: string): Promise<BankAccountApiResponse>
+    async resolve (params: NgnAccountBodyParams, traceId?: string): Promise<BankAccountApiResponse>
+    async resolve (params: UsdAccountBodyParams, traceId?: string): Promise<BankAccountApiResponse>
     async resolve (params: any, traceId?: string, scenarioKey?: string): Promise<any> {
         await this.#flutterwave.ensureTokenIsValid()
 
-        const { data } = await Http.send<BankApiResponse[]>(
+        const { data } = await Http.send<BankAccountApiResponse>(
             this.#flutterwave.builder.buildTargetUrl('/banks/account-resolve'),
             'POST',
             params,

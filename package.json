@@ -1,69 +1,79 @@
 {
-    "name": "@toneflix/flutterwave",
-    "type": "module",
-    "version": "0.1.0",
-    "description": "Flutterwave v4 payment APIs SDK for Node.JS.",
-    "main": "dist/index.js",
-    "private": false,
-    "homepage": "https://flutterwave.toneflix.net",
-    "repository": {
-        "url": "https://github.com/toneflix/flutterwave-4-nodejs-sdk.git",
-        "type": "git"
+  "name": "@toneflix/flutterwave",
+  "type": "module",
+  "version": "0.1.0",
+  "description": "Flutterwave v4 payment APIs SDK for Node.JS.",
+  "main": "./dist/index.cjs",
+  "private": false,
+  "homepage": "https://flutterwave.toneflix.net",
+  "repository": {
+    "url": "https://github.com/toneflix/flutterwave-4-nodejs-sdk.git",
+    "type": "git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
     },
-    "publishConfig": {
-        "access": "public"
+    "./contracts": {
+      "import": "./dist/contracts.js",
+      "require": "./dist/contracts.cjs"
     },
-    "exports": {
-        ".": "./dist/index.js"
-    },
-    "files": [
-        "dist"
-    ],
-    "keywords": [
-        "flutterwave",
-        "cli",
-        "command-line",
-        "tool",
-        "integration",
-        "sdk",
-        "api",
-        "developer",
-        "flutterwave-sdk",
-        "toneflix"
-    ],
-    "scripts": {
-        "quick:test": "pnpm vitest",
-        "test": "pnpm run quick:test",
-        "lint": "eslint . --ext .ts --ext .js",
-        "runner": "tsx --experimental-specifier-resolution=node src/cli.ts",
-        "build": "tsdown",
-        "version": "pnpm run build",
-        "barrel": "barrelize",
-        "release": "pnpm build && pnpm changeset version && pnpm changeset publish",
-        "publish-it": "pnpm build && pnpm publish --tag latest",
-        "docs:dev": "vitepress dev docs",
-        "docs:build": "vitepress build docs",
-        "docs:preview": "vitepress preview docs"
-    },
-    "dependencies": {
-        "axios": "^1.13.2",
-        "dotenv": "^17.2.3",
-        "tsdown": "^0.15.4"
-    },
-    "devDependencies": {
-        "@changesets/cli": "^2.29.5",
-        "@eslint/js": "^9.39.2",
-        "@eslint/markdown": "^7.5.1",
-        "@swc/core": "^1.6.1",
-        "@types/node": "^20.14.5",
-        "barrelize": "^1.7.2",
-        "eslint": "^9.39.2",
-        "tsx": "^4.20.3",
-        "typescript": "^5.4.5",
-        "typescript-eslint": "^8.53.0",
-        "vite-tsconfig-paths": "^5.1.4",
-        "vitepress": "^1.5.0",
-        "vitest": "^3.2.4",
-        "vue": "^3.5.13"
-    }
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "flutterwave",
+    "cli",
+    "command-line",
+    "tool",
+    "integration",
+    "sdk",
+    "api",
+    "developer",
+    "flutterwave-sdk",
+    "toneflix"
+  ],
+  "scripts": {
+    "quick:test": "pnpm vitest",
+    "test": "pnpm run quick:test",
+    "lint": "eslint . --ext .ts --ext .js",
+    "runner": "tsx --experimental-specifier-resolution=node src/cli.ts",
+    "build": "tsdown",
+    "version": "pnpm run build",
+    "barrel": "barrelize",
+    "release": "pnpm build && pnpm changeset version && pnpm changeset publish",
+    "publish-it": "pnpm build && pnpm publish --tag latest",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
+  },
+  "dependencies": {
+    "axios": "^1.13.2",
+    "dotenv": "^17.2.3",
+    "tsdown": "^0.15.4"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.29.5",
+    "@eslint/js": "^9.39.2",
+    "@eslint/markdown": "^7.5.1",
+    "@swc/core": "^1.6.1",
+    "@types/node": "^20.14.5",
+    "barrelize": "^1.7.2",
+    "eslint": "^9.39.2",
+    "tsx": "^4.20.3",
+    "typescript": "^5.4.5",
+    "typescript-eslint": "^8.53.0",
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitepress": "^1.5.0",
+    "vitest": "^3.2.4",
+    "vue": "^3.5.13"
+  },
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.cts"
 }

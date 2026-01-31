@@ -6,7 +6,6 @@
       "root": "src",
       "name": "index.ts",
       "order": [
-        "Contracts",
         "utilities"
       ],
       "include": [
@@ -15,7 +14,19 @@
       "exclude": [
         "**/*.test.ts",
         "**/*.d.ts",
+        "**/Contracts/**",
         "utilities/global.ts"
+      ]
+    },
+    {
+      "root": "src/Contracts",
+      "name": "index.ts",
+      "include": [
+        "**/*.ts"
+      ],
+      "exclude": [
+        "**/*.test.ts",
+        "**/*.d.ts"
       ]
     }
   ]

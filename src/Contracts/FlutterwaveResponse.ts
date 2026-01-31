@@ -1,12 +1,16 @@
 import { FlutterwaveErrorType, FlutterwaveErrorValue } from './Errors'
 
+import { XGenericObject } from './Interfaces'
+
+export type FlutterwaveResponseStatus = 'failed' | 'success'
+
 export interface FlutterwaveValidationError {
     'field_name': string
     'message': string
 }
 
 export interface FlutterwaveErrorResponse {
-    status: 'failed' | 'success'
+    status: FlutterwaveResponseStatus
     message?: string
     error: {
         type: FlutterwaveErrorType
@@ -16,7 +20,7 @@ export interface FlutterwaveErrorResponse {
 }
 
 export interface FlutterwaveValidationErrorResponse {
-    status: 'failed' | 'success'
+    status: FlutterwaveResponseStatus
     message?: string
     error: {
         type: FlutterwaveErrorType
@@ -27,7 +31,7 @@ export interface FlutterwaveValidationErrorResponse {
 }
 
 export interface FlutterwaveSuccessResponse<T = any> {
-    status: 'failed' | 'success'
+    status: FlutterwaveResponseStatus
     message: string
     data: T
 }
@@ -48,11 +52,12 @@ export interface FlutterwaveAuthErrorResponse {
 
 export type FlutterwaveResponse<T = any> = FlutterwaveSuccessResponse<T> | FlutterwaveErrorResponse
 
-export interface UnifiedFlutterwaveResponse<T = any> {
+export interface UnifiedFlutterwaveResponse<T = any, M extends XGenericObject = XGenericObject> {
     success: boolean
     message: string
-    status?: 'failed' | 'success'
+    status?: FlutterwaveResponseStatus
     data: T
+    meta?: M | undefined
     error?: {
         type: FlutterwaveErrorType
         code: FlutterwaveErrorValue
@@ -67,4 +72,14 @@ export interface CursorPagination {
     limit: number
     total: number
     has_more_items: boolean
+}
+
+export interface NormalPagination {
+    total: number
+    current_page: number
+    total_pages: number
+}
+
+export interface PageInfoMeta {
+    page_info: NormalPagination
 }
