@@ -103,7 +103,7 @@ describe('API Spec', () => {
         })
     })
 
-    describe('Fees', () => {
+    describe.skip('Fees', () => {
         /**
          * Probably Not Implemented Yet By Flutterwave
          */
@@ -135,7 +135,7 @@ describe('API Spec', () => {
         })
     })
 
-    describe.only('Customers', () => {
+    describe('Customers', () => {
         it('can create customer', async () => {
             const response = await flutterwave.api.customers.create({
                 email: `testuser${Date.now()}@example.com`,
@@ -178,7 +178,7 @@ describe('API Spec', () => {
         })
     })
 
-    describe.only('Payment Methods', () => {
+    describe('Payment Methods', () => {
         it('can create payment method', async () => {
             const response = await flutterwave.api.paymentMethods.create({
                 type: 'card',
@@ -272,7 +272,7 @@ describe('API Spec', () => {
         })
     })
 
-    describe.only('Charges', async () => {
+    describe('Charges', async () => {
         it('can create charge', async () => {
             const response = await flutterwave.api.charges.create({
                 amount: 1000,
@@ -387,7 +387,7 @@ describe('API Spec', () => {
         })
     })
 
-    describe.only('Refunds', () => {
+    describe('Refunds', () => {
         it('should create a refund', async () => {
             const refund = await flutterwave.api.refunds.create({
                 charge_id: chargeId,
