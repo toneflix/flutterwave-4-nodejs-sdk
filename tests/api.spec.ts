@@ -1,7 +1,7 @@
 import { beforeAll, describe, expect, it } from 'vitest'
 
 import { Flutterwave } from '../src'
-import crypto from 'crypto'
+import { IDirectChargeCreateForm } from '../src/Contracts/Api/OrchestrationApi'
 
 let flutterwave: Flutterwave
 let customerId: string
@@ -182,8 +182,6 @@ describe('API Spec', () => {
             const response = await flutterwave.api.paymentMethods.create({
                 type: 'card',
                 card: {
-                    // Random 12 digit alphanumeric string for nonce
-                    nonce: crypto.randomBytes(6).toString('hex'),
                     card_number: '4242424242424242',
                     cvv: '123',
                     expiry_month: '12',
@@ -301,6 +299,57 @@ describe('API Spec', () => {
             expect(response.data).toBeDefined()
             expect(Array.isArray(response.data)).toBe(true)
             expect(response.meta).toBeDefined()
+        })
+    })
+
+    describe.only('Orchestration', () => {
+        const form: IDirectChargeCreateForm = {
+            amount: 2000,
+            currency: 'NGN',
+            reference: `test-orch-charge-ref-${Date.now()}`,
+            customer: {
+                email: `orchuser${Date.now()}@example.com`,
+                name: {
+                    first: 'Orch',
+                    last: 'User',
+                },
+                address: {
+                    line1: '456 Orch St',
+                    city: 'Abuja',
+                    state: 'FCT',
+                    country: 'NG',
+                    postal_code: '900001',
+                },
+                phone: {
+                    country_code: '234',
+                    number: '8098765432',
+                },
+            },
+            payment_method: {
+                type: 'card',
+                card: {
+                    card_number: '4242424242424242',
+                    cvv: '123',
+                    expiry_month: '12',
+                    expiry_year: '30',
+                },
+            },
+        }
+
+        it('can create direct charge', async () => {
+            const response = await flutterwave.api.orchestration.directCharges(form, traceId, indempotencyKey)
+
+            expect(response).toBeDefined()
+            expect(response.id).toBeDefined()
+            expect(response.amount).toBe(2000)
+        })
+
+        it('can create direct order', async () => {
+            const response = await flutterwave.api.orchestration.directOrders(form, traceId, indempotencyKey)
+
+            expect(response).toBeDefined()
+            expect(response.id).toBeDefined()
+            expect(response.amount).toBe(2000)
         })
     })
 

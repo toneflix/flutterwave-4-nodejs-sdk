@@ -12,10 +12,10 @@ import { MobileNetworks } from './MobileNetworks'
 import { Orchestration } from './Orchestration'
 import { Orders } from './Orders'
 import { PaymentMethods } from './PaymentMethods'
-import { RateConversion } from './RateConversion'
 import { RefundCompleted } from './RefundCompleted'
 import { Refunds } from './Refunds'
 import { Settlements } from './Settlements'
+import { TransferRates } from './TransferRates'
 import { TransferRecipients } from './TransferRecipients'
 import { TransferSenders } from './TransferSenders'
 import { Transfers } from './Transfers'
@@ -77,7 +77,7 @@ export class BaseApi {
     /**
      * Rate Conversion API instance
      */
-    rateConversion!: RateConversion
+    transferRates!: TransferRates
 
     /**
      * Refund Completed API instance
@@ -185,7 +185,7 @@ export class BaseApi {
         baseApi.orchestration = new Orchestration(baseApi.#flutterwave)
         baseApi.orders = new Orders(baseApi.#flutterwave)
         baseApi.paymentMethods = new PaymentMethods(baseApi.#flutterwave)
-        baseApi.rateConversion = new RateConversion(baseApi.#flutterwave)
+        baseApi.transferRates = new TransferRates(baseApi.#flutterwave)
         baseApi.refundCompleted = new RefundCompleted(baseApi.#flutterwave)
         baseApi.refunds = new Refunds(baseApi.#flutterwave)
         baseApi.settlements = new Settlements(baseApi.#flutterwave)

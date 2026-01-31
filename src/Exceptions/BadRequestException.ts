@@ -10,7 +10,11 @@ export class BadRequestException extends Error {
     data: FlutterwaveValidationErrorResponse
 
     constructor(data?: FlutterwaveValidationErrorResponse) {
-        super(data?.error.message ?? data?.message ?? 'Bad request. The server could not understand the request due to invalid syntax.')
+        super(
+            data?.error.message ??
+            data?.message ??
+            'Bad request. The server could not understand the request due to invalid syntax.'
+        )
 
         if (data?.error.code) {
             this.type = data.error.type

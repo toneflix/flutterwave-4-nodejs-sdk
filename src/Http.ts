@@ -134,7 +134,8 @@ export class Http {
                 meta: data.meta as M,
             }
         } catch (e: any) {
-            const error = (e.response?.data ?? {}) as Record<string, any>
+            const error = (e.response?.data ?? {})
+
             throw this.exception(e.response?.status ?? 500, error || e, e)
         }
     }
@@ -146,7 +147,7 @@ export class Http {
      * @param error 
      * @returns 
      */
-    private static exception (status: number, error: any, originalError: Error): Error {
+    private static exception (status: number, error: XGenericObject, originalError: Error): Error {
         const exception = HttpException.fromCode(status, {
             success: false,
             message: `Request failed: ${error.error?.message || 'An error occurred'}`,

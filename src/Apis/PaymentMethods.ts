@@ -13,8 +13,11 @@ export class PaymentMethods {
 
     /**
      * List payment methods
-     * 
+     *
+     * @param query 
+     * @param traceId 
      * @method GET
+     * @returns 
      */
     async list (
         query: BaseListQueryParams = {},
@@ -72,8 +75,9 @@ export class PaymentMethods {
      * Retrieve a payment method
      * 
      * @param id 
-     * 
+     * @param traceId 
      * @method GET
+     * @returns 
      */
     async retrieve (
         id: string,

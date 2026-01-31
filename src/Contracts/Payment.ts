@@ -9,6 +9,13 @@ export interface OtpAuthorization {
     }
 }
 
+export interface AvsAuthorization {
+    type: 'avs',
+    avs: {
+        address: IAddress
+    }
+}
+
 export interface PinAuthorization {
     type: 'pin',
     pin: {
@@ -31,7 +38,7 @@ export interface External3DsAuthorization {
     }
 }
 
-export type Authorization = OtpAuthorization | PinAuthorization | External3DsAuthorization
+export type Authorization = OtpAuthorization | PinAuthorization | External3DsAuthorization | AvsAuthorization
 
 export interface CardDetails {
     expiry_month: string
@@ -56,7 +63,7 @@ export type EncryptedCardDetails = {
 } & { nonce: string };
 
 export interface IPaymentCard extends CardDetails {
-    nonce: string
+    nonce?: string
     billing_address?: Omit<IAddress, 'line2'> & { line2?: string }
 }
 
@@ -75,10 +82,10 @@ export interface ICard {
         billing_address: IAddress,
         cof: {
             enabled: boolean
-            agreement_id: string
-            recurring_amount_variability: 'VARIABLE'
-            agreement_type: 'UNSCHEDULED'
-            trace_id: string
+            agreement_id?: string
+            recurring_amount_variability?: 'VARIABLE'
+            agreement_type?: 'UNSCHEDULED'
+            trace_id?: string
         },
         card_holder_name: string
     }
