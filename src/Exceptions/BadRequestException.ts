@@ -1,6 +1,6 @@
 import { FlutterwaveErrorType, FlutterwaveErrorValue } from '../Contracts/Errors'
 
-import { FlutterwaveValidationErrorResponse } from '../Contracts/FlutterwaveResponse'
+import { FlutterwaveValidationErrorResponse } from '../Contracts/FlutterwaveCore'
 
 export class BadRequestException extends Error {
     statusCode: number = 400

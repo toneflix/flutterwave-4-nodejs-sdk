@@ -83,3 +83,22 @@ export interface NormalPagination {
 export interface PageInfoMeta {
     page_info: NormalPagination
 }
+
+export interface InitOptions {
+    /**
+     * Your Flutterwave Public Key
+     */
+    clientId: string
+    /**
+     * Your Flutterwave Secret Key
+     */
+    clientSecret: string
+    /**
+     * Your Flutterwave Encryption Key
+     */
+    encryptionKey?: string
+    /**     
+     * Environment to use
+     */
+    environment?: 'sandbox' | 'live'
+}

@@ -2,7 +2,7 @@ import { ChargeCreateFormData, ChargeUpdateFormData, ChargesListQueryParams, ICh
 
 import { Flutterwave } from '../Flutterwave'
 import { Http } from '../Http'
-import { PageInfoMeta } from '../Contracts/FlutterwaveResponse'
+import { PageInfoMeta } from '../Contracts/FlutterwaveCore'
 
 export class Charges {
     #flutterwave: Flutterwave

@@ -1,6 +1,6 @@
 import { FlutterwaveErrorType, FlutterwaveErrorValue } from '../Contracts/Errors'
 
-import { FlutterwaveErrorResponse } from '../Contracts/FlutterwaveResponse'
+import { FlutterwaveErrorResponse } from '../Contracts/FlutterwaveCore'
 
 export class UnauthorizedRequestException extends Error {
     statusCode: number = 401

@@ -1,7 +1,7 @@
 import { BadRequestException } from './BadRequestException'
 import { ForbiddenRequestException } from './ForbiddenRequestException'
 import { UnauthorizedRequestException } from './UnauthorizedRequestException'
-import { UnifiedFlutterwaveResponse } from '../Contracts/FlutterwaveResponse'
+import { UnifiedFlutterwaveResponse } from '../Contracts/FlutterwaveCore'
 
 export class HttpException extends Error {
     statusCode: number = 500

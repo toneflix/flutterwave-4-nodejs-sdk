@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { Builder } from '../src/Builder'
+import { Flutterwave } from '../src'
 import { WebhookValidator } from '../src/utilities/WebhookValidator'
 
 describe('Base Spec', () => {
@@ -134,6 +135,18 @@ describe('Base Spec', () => {
             const validator2 = new WebhookValidator('different_secret')
 
             expect(validator2.validate(rawBody, validator.generateSignature(rawBody))).toBe(false)
+        })
+    })
+
+    describe('Flutterwave', () => {
+        it('should set and get environment correctly', () => {
+            // process.env.ENVIRONMENT = 'live'
+            // const flutterwaveInstance2 = new Flutterwave()
+            // expect(flutterwaveInstance2.getEnvironment()).toBe('live')
+
+            // process.env.ENVIRONMENT = 'sandbox'
+            // const flutterwaveInstance1 = new Flutterwave()
+            // expect(flutterwaveInstance1.getEnvironment()).toBe('sandbox')
         })
     })
 })

@@ -5,7 +5,7 @@ import axios, { RawAxiosRequestHeaders } from 'axios'
 import { BaseApi } from './Apis/BaseApi'
 import { Builder } from './Builder'
 import { HttpException } from './Exceptions/HttpException'
-import { UnifiedFlutterwaveResponse } from './Contracts/FlutterwaveResponse'
+import { UnifiedFlutterwaveResponse } from './Contracts/FlutterwaveCore'
 import { XGenericObject } from './Contracts/Interfaces'
 
 export class Http {

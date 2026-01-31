@@ -1,8 +1,9 @@
 import './utilities/global'
 
+import { FlutterwaveAuthResponse, InitOptions } from './Contracts/FlutterwaveCore'
+
 import { BaseApi } from './Apis/BaseApi'
 import { Builder } from './Builder'
-import { FlutterwaveAuthResponse } from './Contracts/FlutterwaveResponse'
 import { Http } from './Http'
 
 export class Flutterwave {
@@ -17,6 +18,11 @@ export class Flutterwave {
      * Client Secret
      */
     private clientSecret: string
+
+    /**
+     * Flutterwave Environment
+     */
+    static environment: 'sandbox' | 'live' = 'live'
 
     /**
      * Encryption Key
@@ -55,10 +61,20 @@ export class Flutterwave {
      * @param clientSecret 
      * @param encryptionKey 
      */
-    constructor(clientId?: string, clientSecret?: string, encryptionKey?: string) {
-        this.clientId = clientId ?? process.env.CLIENT_ID ?? ''
-        this.clientSecret = clientSecret ?? process.env.CLIENT_SECRET ?? ''
-        this.encryptionKey = encryptionKey ?? process.env.ENCRYPTION_KEY
+    constructor(clientId?: InitOptions)
+    constructor(clientId?: string, clientSecret?: string, encryptionKey?: string)
+    constructor(clientId?: string | InitOptions, clientSecret?: string, encryptionKey?: string) {
+        if (typeof clientId === 'object') {
+            this.clientId = clientId.clientId
+            this.clientSecret = clientId.clientSecret
+            this.encryptionKey = clientId.encryptionKey ?? process.env.ENCRYPTION_KEY
+            Flutterwave.environment = clientId.environment ?? 'live'
+        } else {
+            this.clientId = clientId ?? process.env.CLIENT_ID ?? ''
+            this.clientSecret = clientSecret ?? process.env.CLIENT_SECRET ?? ''
+            this.encryptionKey = encryptionKey ?? process.env.ENCRYPTION_KEY
+            Flutterwave.environment = (process.env.ENVIRONMENT ?? 'live') as 'sandbox' | 'live'
+        }
 
         if (!this.clientId || !this.clientSecret) {
             throw new Error('Client ID and Client Secret are required to initialize Flutterwave instance')
@@ -76,7 +92,9 @@ export class Flutterwave {
      * @param accessToken 
      * @returns 
      */
-    init (clientId?: string, clientSecret?: string, encryptionKey?: string) {
+    init (clientId?: InitOptions): Flutterwave
+    init (clientId?: string, clientSecret?: string, encryptionKey?: string): Flutterwave
+    init (clientId?: any, clientSecret?: string, encryptionKey?: string): Flutterwave {
         return new Flutterwave(
             clientId,
             clientSecret,
@@ -105,6 +123,15 @@ export class Flutterwave {
      */
     getAccessToken () {
         return this.accessToken
+    }
+
+    /**
+     * Get the current environment
+     * 
+     * @returns 
+     */
+    getEnvironment () {
+        return Flutterwave.environment
     }
 
     /**

@@ -2,7 +2,7 @@ import { Authorization, BillingDetails, FeeDetails, IPaymentMethod } from '../Pa
 import { BaseListQueryParams, XGenericObject } from '../Interfaces'
 
 import { CurrencyCode } from '../Codes'
-import { FlutterwaveResponseStatus } from '../FlutterwaveResponse'
+import { FlutterwaveResponseStatus } from '../FlutterwaveCore'
 import { NextAction } from '../Actions'
 
 export interface ChargebacksMeta {
