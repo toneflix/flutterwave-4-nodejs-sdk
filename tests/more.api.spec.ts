@@ -12,6 +12,7 @@ let transferId: string
 let transferSenderId: string
 let virtualAccountId: string
 let indempotencyKey: string
+const trX = faker.string.alphanumeric({ casing: 'mixed', length: 10 })
 const scenarioKey: string = 'TEST_SCENARIO_KEY'
 let person: {
     [k: string]: {
@@ -378,7 +379,7 @@ describe('API Spec', () => {
             })
 
             const account = await flutterwave.api.virtualAccounts.create({
-                reference: traceId.replace('test-trace-id-', 'va-ref-'),
+                reference: trX,
                 customer_id: customer.id,
                 amount: 1000,
                 expiry: 222,
@@ -394,7 +395,7 @@ describe('API Spec', () => {
 
             expect(account).toBeDefined()
             expect(account.id).toBeDefined()
-            expect(account.reference).toBe(`va-ref-${traceId.replace('test-trace-id-', '')}`)
+            expect(account.reference).toBe(trX)
             expect(account.account_number).toBeDefined()
             expect(account.currency).toBe('NGN')
 
