@@ -1,7 +1,7 @@
 {
   "name": "flutterwave-node-v4",
   "type": "module",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Flutterwave v4 payment APIs SDK for Node.JS.",
   "main": "./dist/index.cjs",
   "private": false,
