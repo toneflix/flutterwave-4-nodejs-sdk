@@ -6,7 +6,7 @@ hero:
   text: Node.js v4 API Integration
   tagline: Type-safe, modern SDK for integrating Flutterwave payment services into your Node.js applications
   image:
-    src: /logo.svg
+    src: /banner.png
     alt: Flutterwave SDK
   actions:
     - theme: brand

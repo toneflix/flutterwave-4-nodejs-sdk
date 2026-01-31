@@ -6,7 +6,7 @@ export default defineConfig({
     base: '/',
 
     themeConfig: {
-        logo: '/logo.svg',
+        logo: '/logo.png',
 
         nav: [
             { text: 'Home', link: '/' },
@@ -72,7 +72,7 @@ export default defineConfig({
 
         footer: {
             message: 'Released under the MIT License.',
-            copyright: 'Copyright © 2024-present Toneflix'
+            copyright: `Copyright © ${new Date().getFullYear()} Toneflix`
         },
 
         search: {
