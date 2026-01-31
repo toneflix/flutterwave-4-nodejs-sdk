@@ -2,7 +2,6 @@ import './utilities/global'
 
 import { CardDetails, EncryptedCardDetails } from './Contracts'
 
-import { Flutterwave } from './Flutterwave'
 import { XGenericObject } from './Contracts/Interfaces'
 import { buildUrl } from './utilities/helpers'
 import crypto from 'crypto'
@@ -13,13 +12,15 @@ export class Builder {
         sandbox: 'https://developersandbox-api.flutterwave.com/',
     }
 
+    constructor() { }
+
     /**
      * Gets the base url based on environment
      * 
      * @returns 
      */
     static baseUrl () {
-        const env = process.env.ENVIRONMENT || Flutterwave.environment || 'sandbox'
+        const env = process.env.ENVIRONMENT || 'sandbox'
 
         if (env === 'live') {
             return this.baseUrls.live
