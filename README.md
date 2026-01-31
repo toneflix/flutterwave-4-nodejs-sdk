@@ -3,6 +3,7 @@
 [![npm version](https://badge.fury.io/js/flutterwave-node-v4.svg)](https://www.npmjs.com/package/flutterwave-node-v4)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![CI](https://github.com/toneflix/flutterwave-4-nodejs-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/toneflix/flutterwave-4-nodejs-sdk/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/toneflix/flutterwave-4-nodejs-sdk/graph/badge.svg?token=pOeGg2gLvl)](https://codecov.io/gh/toneflix/flutterwave-4-nodejs-sdk)
 
 The unofficial Flutterwave Node.js SDK for v4 APIs. This library provides a simple and intuitive way to integrate Flutterwave payment services into your Node.js applications.
 
