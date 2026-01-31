@@ -81,35 +81,34 @@ import { Flutterwave } from 'flutterwave-node-v4';
 
 // Initialize the SDK
 const flutterwave = new Flutterwave({
-  publicKey: 'your_public_key',
-  secretKey: 'your_secret_key',
+  clientId: 'your_client_id',
+  clientSecret: 'your_client_secret',
   encryptionKey: 'your_encryption_key',
 });
 
 // Create a transfer
-const transfer = await flutterwave.api.transfers.directTransfers({
+const transfer = await flutterwave.api.transfers.directTransfer({
   action: 'instant',
   reference: 'unique-ref-' + Date.now(),
   narration: 'Payment for services',
+  type: 'bank',
   payment_instruction: {
-    type: 'bank',
-    bank: {
-      source_currency: 'NGN',
-      amount: {
-        value: 10000,
-        applies_to: 'source_currency',
+    source_currency: 'NGN',
+    destination_currency: 'NGN',
+    amount: {
+      value: 10000,
+      applies_to: 'source_currency',
+    },
+    recipient: {
+      bank: {
+        account_number: '0690000031',
+        code: '044',
       },
-      recipient: {
-        bank: {
-          account_number: '0690000031',
-          code: '044',
-        },
-      },
-      sender: {
-        name: {
-          first: 'John',
-          last: 'Doe',
-        },
+    },
+    sender: {
+      name: {
+        first: 'John',
+        last: 'Doe',
       },
     },
   },

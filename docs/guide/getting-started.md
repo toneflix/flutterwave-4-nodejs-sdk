@@ -46,27 +46,27 @@ The SDK supports two initialization methods:
 **Method 1: Individual Parameters**
 
 ```typescript
-import { Flutterwave } from 'flutterwave-node-v4'
+import { Flutterwave } from 'flutterwave-node-v4';
 
 const flutterwave = new Flutterwave(
   'your_client_id',
   'your_client_secret',
   'your_encryption_key', // optional
-  'sandbox' // optional: 'sandbox' or 'live'
-)
+  'sandbox', // optional: 'sandbox' or 'live'
+);
 ```
 
 **Method 2: Options Object**
 
 ```typescript
-import { Flutterwave } from 'flutterwave-node-v4'
+import { Flutterwave } from 'flutterwave-node-v4';
 
 const flutterwave = new Flutterwave({
   clientId: 'your_client_id',
   clientSecret: 'your_client_secret',
   encryptionKey: 'your_encryption_key', // optional
-  environment: 'sandbox' // optional: 'sandbox' or 'live'
-})
+  environment: 'sandbox', // optional: 'sandbox' or 'live'
+});
 ```
 
 ### 3. Make Your First API Call
@@ -76,9 +76,7 @@ Let's fetch the list of available banks:
 ```typescript
 async function getBanks() {
   try {
-    const banks = await flutterwave.api.banks.list({
-      country: 'NG',
-    });
+    const banks = await flutterwave.api.banks.list('NG');
 
     console.log(`Found ${banks.length} banks`);
     banks.forEach((bank) => {
@@ -140,9 +138,9 @@ import type {
 } from 'flutterwave-node-v4/contracts';
 
 const flutterwave = new Flutterwave({
-  publicKey: process.env.FLUTTERWAVE_PUBLIC_KEY!,
-  secretKey: process.env.FLUTTERWAVE_SECRET_KEY!,
-  encryptionKey: process.env.FLUTTERWAVE_ENCRYPTION_KEY!,
+  clientId: process.env.CLIENT_ID!,
+  clientSecret: process.env.CLIENT_SECRET!,
+  encryptionKey: process.env.ENCRYPTION_KEY!,
 });
 
 async function createTransfer() {
@@ -150,32 +148,31 @@ async function createTransfer() {
     action: 'instant',
     reference: 'ref-' + Date.now(),
     narration: 'Test transfer',
+    type: 'bank',
     payment_instruction: {
-      type: 'bank',
-      bank: {
-        source_currency: 'NGN',
-        amount: {
-          value: 1000,
-          applies_to: 'source_currency',
+      source_currency: 'NGN',
+      destination_currency: 'NGN',
+      amount: {
+        value: 1000,
+        applies_to: 'source_currency',
+      },
+      recipient: {
+        bank: {
+          account_number: '0690000031',
+          code: '044',
         },
-        recipient: {
-          bank: {
-            account_number: '0690000031',
-            code: '044',
-          },
-        },
-        sender: {
-          name: {
-            first: 'John',
-            last: 'Doe',
-          },
+      },
+      sender: {
+        name: {
+          first: 'John',
+          last: 'Doe',
         },
       },
     },
   };
 
   const transfer: ITransfer =
-    await flutterwave.api.transfers.directTransfers(transferData);
+    await flutterwave.api.transfers.directTransfer(transferData);
   return transfer;
 }
 ```
@@ -188,14 +185,14 @@ While the SDK is built as ES modules, it also works with CommonJS:
 const { Flutterwave } = require('flutterwave-node-v4');
 
 const flutterwave = new Flutterwave({
-  publicKey: 'your_public_key',
-  secretKey: 'your_secret_key',
+  clientId: 'your_client_id',
+  clientSecret: 'your_client_secret',
   encryptionKey: 'your_encryption_key',
 });
 
 // Use it the same way
 flutterwave.api.banks
-  .list({ country: 'NG' })
+  .list('NG')
   .then((banks) => console.log(banks))
   .catch((error) => console.error(error));
 ```

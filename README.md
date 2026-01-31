@@ -49,27 +49,27 @@ pnpm add flutterwave-node-v4
 ### Quick Start
 
 ```typescript
-import { Flutterwave } from 'flutterwave-node-v4'
+import { Flutterwave } from 'flutterwave-node-v4';
 
 // Initialize with individual parameters
 const flutterwave = new Flutterwave(
   'your_client_id',
   'your_client_secret',
   'your_encryption_key', // optional
-  'sandbox' // 'sandbox' or 'live'
-)
+  'sandbox', // 'sandbox' or 'live'
+);
 
 // Or initialize with options object
 const flutterwave = new Flutterwave({
   clientId: 'your_client_id',
   clientSecret: 'your_client_secret',
   encryptionKey: 'your_encryption_key', // optional
-  environment: 'sandbox' // 'sandbox' or 'live'
-})
+  environment: 'sandbox', // 'sandbox' or 'live'
+});
 
 // Make your first API call
-const banks = await flutterwave.api.banks.list('NG')
-console.log(banks)
+const banks = await flutterwave.api.banks.list('NG');
+console.log(banks);
 ```
 
 ### Configuration
@@ -90,7 +90,7 @@ const flutterwave = new Flutterwave(
   'your_client_id',
   'your_client_secret',
   'your_encryption_key', // optional
-  'sandbox' // optional: 'sandbox' or 'live', defaults to 'live'
+  'sandbox', // optional: 'sandbox' or 'live', defaults to 'live'
 );
 
 // Or pass as an options object
@@ -98,7 +98,7 @@ const flutterwave = new Flutterwave({
   clientId: 'your_client_id',
   clientSecret: 'your_client_secret',
   encryptionKey: 'your_encryption_key', // optional
-  environment: 'sandbox' // optional: 'sandbox' or 'live', defaults to 'live'
+  environment: 'sandbox', // optional: 'sandbox' or 'live', defaults to 'live'
 });
 ```
 
@@ -147,19 +147,24 @@ console.log('Status:', transfer.status);
 #### List Transfers
 
 ```typescript
-const transfers = await flutterwave.api.transfers.list({
-  page: 1,
-  size: 20,
-  status: 'successful',
-});
+const result = await flutterwave.api.transfers.list(
+  {
+    page: 1,
+    size: 20,
+  },
+  'trace-id', // optional
+);
 
-console.log(`Found ${transfers.data.length} transfers`);
+console.log(`Found ${result.data.length} transfers`);
 ```
 
 #### Retrieve a Transfer
 
 ```typescript
-const transfer = await flutterwave.api.transfers.retrieve('transfer_id');
+const transfer = await flutterwave.api.transfers.retrieve(
+  'transfer_id',
+  'trace-id', // optional
+);
 ```
 
 ### Virtual Accounts
@@ -236,16 +241,22 @@ const branches = await flutterwave.api.banks.branches('bank_id');
 #### List Settlements
 
 ```typescript
-const settlements = await flutterwave.api.settlements.list({
-  page: 1,
-  size: 20,
-});
+const result = await flutterwave.api.settlements.list(
+  {
+    page: 1,
+    size: 20,
+  },
+  'trace-id', // optional
+);
 ```
 
 #### Retrieve Settlement
 
 ```typescript
-const settlement = await flutterwave.api.settlements.retrieve('settlement_id');
+const settlement = await flutterwave.api.settlements.retrieve(
+  'settlement_id',
+  'trace-id', // optional
+);
 ```
 
 ## Error Handling

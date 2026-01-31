@@ -4,17 +4,17 @@ Learn how to configure the Flutterwave SDK for different environments and use ca
 
 ## Basic Configuration
 
-The SDK can be configured in two ways: using environment variables or passing configuration options directly.
+The SDK can be configured in multiple ways: using environment variables, individual parameters, or an options object.
 
 ### Using Environment Variables
 
 The SDK automatically reads from these environment variables:
 
 ```bash
-FLUTTERWAVE_PUBLIC_KEY=your_public_key
-FLUTTERWAVE_SECRET_KEY=your_secret_key
-FLUTTERWAVE_ENCRYPTION_KEY=your_encryption_key
-FLUTTERWAVE_ENVIRONMENT=sandbox # or 'production'
+CLIENT_ID=your_client_id
+CLIENT_SECRET=your_client_secret
+ENCRYPTION_KEY=your_encryption_key
+ENVIRONMENT=sandbox  # or 'live'
 ```
 
 Then initialize without parameters:
@@ -25,17 +25,33 @@ import { Flutterwave } from 'flutterwave-node-v4';
 const flutterwave = new Flutterwave();
 ```
 
-### Passing Configuration Directly
+### Using Individual Parameters
 
-Alternatively, pass configuration options directly:
+Pass credentials as individual parameters:
 
 ```typescript
 import { Flutterwave } from 'flutterwave-node-v4';
 
-const flutterwave = new Flutterwave('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
-  'PHxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
-  'Latxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=',
-  environment: 'sandbox', // 'sandbox' or 'production'
+const flutterwave = new Flutterwave(
+  'your_client_id',
+  'your_client_secret',
+  'your_encryption_key', // optional
+  'sandbox', // optional: 'sandbox' or 'live'
+);
+```
+
+### Using Options Object
+
+Alternatively, pass configuration as an object:
+
+```typescript
+import { Flutterwave } from 'flutterwave-node-v4';
+
+const flutterwave = new Flutterwave({
+  clientId: 'your_client_id',
+  clientSecret: 'your_client_secret',
+  encryptionKey: 'your_encryption_key', // optional
+  environment: 'sandbox', // optional: 'sandbox' or 'live'
 });
 ```
 
@@ -115,18 +131,18 @@ import { Flutterwave } from 'flutterwave-node-v4';
 
 // Sandbox instance for testing
 const sandboxClient = new Flutterwave({
-  publicKey: process.env.SANDBOX_PUBLIC_KEY!,
-  secretKey: process.env.SANDBOX_SECRET_KEY!,
-  encryptionKey: process.env.SANDBOX_ENCRYPTION_KEY!,
+  clientId: process.env.SANDBOX_CLIENT_ID!,
+  clientSecret: process.env.SANDBOX_CLIENT_SECRET!,
+  encryptionKey: process.env.SANDBOX_ENCRYPTION_KEY,
   environment: 'sandbox',
 });
 
 // Production instance for live transactions
 const productionClient = new Flutterwave({
-  publicKey: process.env.PRODUCTION_PUBLIC_KEY!,
-  secretKey: process.env.PRODUCTION_SECRET_KEY!,
-  encryptionKey: process.env.PRODUCTION_ENCRYPTION_KEY!,
-  environment: 'production',
+  clientId: process.env.PRODUCTION_CLIENT_ID!,
+  clientSecret: process.env.PRODUCTION_CLIENT_SECRET!,
+  encryptionKey: process.env.PRODUCTION_ENCRYPTION_KEY,
+  environment: 'live',
 });
 
 // Use the appropriate client based on your needs
@@ -141,19 +157,19 @@ Create a configuration factory for cleaner code:
 ```typescript
 import { Flutterwave } from 'flutterwave-node-v4';
 
-function createFlutterwaveClient(environment: 'sandbox' | 'production') {
+function createFlutterwaveClient(environment: 'sandbox' | 'live') {
   const config = {
     sandbox: {
-      publicKey: process.env.SANDBOX_PUBLIC_KEY!,
-      secretKey: process.env.SANDBOX_SECRET_KEY!,
-      encryptionKey: process.env.SANDBOX_ENCRYPTION_KEY!,
+      clientId: process.env.SANDBOX_CLIENT_ID!,
+      clientSecret: process.env.SANDBOX_CLIENT_SECRET!,
+      encryptionKey: process.env.SANDBOX_ENCRYPTION_KEY,
       environment: 'sandbox' as const,
     },
-    production: {
-      publicKey: process.env.PRODUCTION_PUBLIC_KEY!,
-      secretKey: process.env.PRODUCTION_SECRET_KEY!,
-      encryptionKey: process.env.PRODUCTION_ENCRYPTION_KEY!,
-      environment: 'production' as const,
+    live: {
+      clientId: process.env.PRODUCTION_CLIENT_ID!,
+      clientSecret: process.env.PRODUCTION_CLIENT_SECRET!,
+      encryptionKey: process.env.PRODUCTION_ENCRYPTION_KEY,
+      environment: 'live' as const,
     },
   };
 
@@ -171,13 +187,12 @@ The SDK validates your configuration on initialization:
 ```typescript
 try {
   const flutterwave = new Flutterwave({
-    publicKey: '', // Invalid: empty string
-    secretKey: '', // Invalid: empty string
-    encryptionKey: '', // Invalid: empty string
+    clientId: '', // Invalid: empty string
+    clientSecret: '', // Invalid: empty string
   });
 } catch (error) {
   console.error('Configuration error:', error.message);
-  // Configuration error: Public key is required
+  // Configuration error: Client ID and Client Secret are required
 }
 ```
 
@@ -190,16 +205,16 @@ Store credentials in environment variables, not in your code:
 ```typescript
 // ❌ Bad: Hardcoded credentials
 const flutterwave = new Flutterwave({
-  publicKey: 'FLWPUBK-xxxxxxxxxxxxx',
-  secretKey: 'FLWSECK-xxxxxxxxxxxxx',
-  encryptionKey: 'FLWSECK_TESTxxxxxxxxx',
+  clientId: 'your_client_id',
+  clientSecret: 'your_client_secret',
+  encryptionKey: 'your_encryption_key',
 });
 
 // ✅ Good: From environment variables
 const flutterwave = new Flutterwave({
-  publicKey: process.env.FLUTTERWAVE_PUBLIC_KEY!,
-  secretKey: process.env.FLUTTERWAVE_SECRET_KEY!,
-  encryptionKey: process.env.FLUTTERWAVE_ENCRYPTION_KEY!,
+  clientId: process.env.CLIENT_ID!,
+  clientSecret: process.env.CLIENT_SECRET!,
+  encryptionKey: process.env.ENCRYPTION_KEY,
 });
 ```
 
@@ -210,21 +225,21 @@ Keep sandbox and production credentials completely separate:
 ```typescript
 // ✅ Good: Clear separation
 const config = {
-  publicKey:
+  clientId:
     process.env.NODE_ENV === 'production'
-      ? process.env.PRODUCTION_PUBLIC_KEY!
-      : process.env.SANDBOX_PUBLIC_KEY!,
-  secretKey:
+      ? process.env.PRODUCTION_CLIENT_ID!
+      : process.env.SANDBOX_CLIENT_ID!,
+  clientSecret:
     process.env.NODE_ENV === 'production'
-      ? process.env.PRODUCTION_SECRET_KEY!
-      : process.env.SANDBOX_SECRET_KEY!,
+      ? process.env.PRODUCTION_CLIENT_SECRET!
+      : process.env.SANDBOX_CLIENT_SECRET!,
   encryptionKey:
     process.env.NODE_ENV === 'production'
-      ? process.env.PRODUCTION_ENCRYPTION_KEY!
-      : process.env.SANDBOX_ENCRYPTION_KEY!,
+      ? process.env.PRODUCTION_ENCRYPTION_KEY
+      : process.env.SANDBOX_ENCRYPTION_KEY,
   environment:
     process.env.NODE_ENV === 'production'
-      ? ('production' as const)
+      ? ('live' as const)
       : ('sandbox' as const),
 };
 
@@ -249,27 +264,26 @@ Leverage TypeScript for configuration safety:
 
 ```typescript
 interface FlutterwaveConfig {
-  publicKey: string;
-  secretKey: string;
+  clientId: string;
+  clientSecret: string;
   encryptionKey: string;
-  environment: 'sandbox' | 'production';
+  environment: 'sandbox' | 'live';
 }
 
 function getConfig(): FlutterwaveConfig {
-  const publicKey = process.env.FLUTTERWAVE_PUBLIC_KEY;
-  const secretKey = process.env.FLUTTERWAVE_SECRET_KEY;
-  const encryptionKey = process.env.FLUTTERWAVE_ENCRYPTION_KEY;
+  const clientId = process.env.CLIENT_ID;
+  const clientSecret = process.env.CLIENT_SECRET;
+  const encryptionKey = process.env.ENCRYPTION_KEY;
 
-  if (!publicKey || !secretKey || !encryptionKey) {
+  if (!clientId || !clientSecret || !encryptionKey) {
     throw new Error('Missing required Flutterwave credentials');
   }
 
   return {
-    publicKey,
-    secretKey,
+    clientId,
+    clientSecret,
     encryptionKey,
-    environment:
-      process.env.NODE_ENV === 'production' ? 'production' : 'sandbox',
+    environment: process.env.NODE_ENV === 'production' ? 'live' : 'sandbox',
   };
 }
 

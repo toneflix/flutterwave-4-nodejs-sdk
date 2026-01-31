@@ -14,7 +14,7 @@ Flutterwave is a leading payment technology company that provides payment infras
 
 ## Key Features
 
-### 🔒 Type-Safe
+### Type-Safe
 
 Built with TypeScript from the ground up, providing:
 
@@ -23,14 +23,14 @@ Built with TypeScript from the ground up, providing:
 - Reduced runtime errors
 - Better developer experience
 
-### 🚀 Modern Architecture
+### Modern Architecture
 
 - Promise-based API with async/await support
 - Automatic authentication and token management
 - Clean, intuitive method names
 - Consistent error handling
 
-### 📦 Comprehensive Coverage
+### Comprehensive Coverage
 
 The SDK covers all Flutterwave v4 API endpoints:
 
@@ -39,7 +39,7 @@ The SDK covers all Flutterwave v4 API endpoints:
 - Chargebacks
 - Customers
 - Fees Calculation
-- Mobile Money Networks
+- Mobile and Mobile Money Networks
 - Payment Orchestration
 - Orders Management
 - Refunds
@@ -48,7 +48,7 @@ The SDK covers all Flutterwave v4 API endpoints:
 - Virtual Accounts
 - Wallet Management
 
-### 🛡️ Production Ready
+### Production Ready
 
 - Comprehensive error handling
 - Automatic retry logic
@@ -72,7 +72,7 @@ Before using this SDK, you should have:
 
 - Node.js 16.x or higher installed
 - A Flutterwave account (sign up at [flutterwave.com](https://flutterwave.com))
-- Your API credentials (public key, secret key, encryption key)
+- Your API credentials (client ID, client secret, encryption key)
 - Basic understanding of JavaScript/TypeScript and async programming
 
 ## Getting Help
