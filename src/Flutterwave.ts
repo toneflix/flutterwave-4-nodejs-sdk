@@ -1,3 +1,5 @@
+import './utilities/global'
+
 import { BaseApi } from './Apis/BaseApi'
 import { Builder } from './Builder'
 import { FlutterwaveAuthResponse } from './Contracts/FlutterwaveResponse'

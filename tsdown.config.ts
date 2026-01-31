@@ -1,4 +1,5 @@
 import { defineConfig } from 'tsdown'
+import { rmSync } from 'node:fs'
 
 export default defineConfig([
     {
@@ -17,6 +18,19 @@ export default defineConfig([
             'os',
             'dotenv'
         ],
-        clean: true
+        clean: true,
+        hooks (hooks) {
+            hooks.hook('build:done', (ctx) => {
+                try {
+                    // Get the absolute output directory
+                    const outDir = ctx.options.outDir ?? 'dist'
+                    // Delete unnecessary folders or files
+                    rmSync(`${outDir}/contracts.cjs`)
+                    rmSync(`${outDir}/contracts.js`)
+                } catch (error) {
+                    console.error('Error during post-build cleanup:', error)
+                }
+            })
+        },
     },
 ]) 

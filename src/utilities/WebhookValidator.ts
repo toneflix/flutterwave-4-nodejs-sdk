@@ -1,3 +1,5 @@
+import '../utilities/global'
+
 import { WebhookValidatorOptions } from '../Contracts/Interfaces'
 import crypto from 'crypto'
 
@@ -9,9 +11,12 @@ export class WebhookValidator {
      * @param secretHash 
      * @param options 
      */
-    constructor(private secretHash: string, options?: WebhookValidatorOptions) {
+    constructor(private secretHash?: string, options?: WebhookValidatorOptions) {
         this.algorithm = options?.hashAlgorithm || 'sha256'
         this.encoding = options?.encoding || 'base64'
+        if (!this.secretHash || this.secretHash.length === 0) {
+            this.secretHash = process.env.SECRET_HASH
+        }
     }
 
     /**
@@ -21,6 +26,9 @@ export class WebhookValidator {
      * @returns {boolean} - True if signature is valid
      */
     validate (rawBody: string, signature: string): boolean {
+        if (!this.secretHash) {
+            throw new Error('Secret hash is required for validation')
+        }
         const hash = crypto
             .createHmac(this.algorithm, this.secretHash)
             .update(rawBody)
@@ -35,6 +43,10 @@ export class WebhookValidator {
      * @returns {string} - Generated signature
      */
     generateSignature (rawBody: string): string {
+        if (!this.secretHash) {
+            throw new Error('Secret hash is required to generate signature')
+        }
+
         return crypto
             .createHmac(this.algorithm, this.secretHash)
             .update(rawBody)
@@ -48,13 +60,16 @@ export class WebhookValidator {
      * @param signature 
      * @returns {Promise<boolean>}
      */
-    async validateAsync (rawBody: string, signature: string): Promise<boolean> {
-        return new Promise((resolve) => {
-            const hmac = crypto.createHmac(this.algorithm, this.secretHash)
-            hmac.update(rawBody)
-            const hash = hmac.digest(this.encoding)
-            resolve(hash === signature)
-        })
+    validateAsync (rawBody: string, signature: string): boolean {
+        if (!this.secretHash) {
+            throw new Error('Secret hash is required for validation')
+        }
+
+        const hmac = crypto.createHmac(this.algorithm, this.secretHash)
+        hmac.update(rawBody)
+        const hash = hmac.digest(this.encoding)
+
+        return (hash === signature)
     }
 
     /**
@@ -64,7 +79,7 @@ export class WebhookValidator {
         return {
             algorithm: this.algorithm,
             encoding: this.encoding,
-            secretHashLength: this.secretHash.length
+            secretHashLength: this.secretHash?.length
         }
     }
 }

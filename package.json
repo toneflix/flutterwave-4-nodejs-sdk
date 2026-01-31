@@ -1,5 +1,5 @@
 {
-  "name": "@toneflix/flutterwave",
+  "name": "flutterwave-node-v4",
   "type": "module",
   "version": "0.1.0",
   "description": "Flutterwave v4 payment APIs SDK for Node.JS.",
@@ -43,7 +43,6 @@
     "quick:test": "pnpm vitest",
     "test": "pnpm run quick:test",
     "lint": "eslint . --ext .ts --ext .js",
-    "runner": "tsx --experimental-specifier-resolution=node src/cli.ts",
     "build": "tsdown",
     "version": "pnpm run build",
     "barrel": "barrelize",

@@ -9,7 +9,6 @@ let traceId: string
 let settlementId: string
 let transferRecipientId: string
 let transferId: string
-let failedTransferId: string
 let transferSenderId: string
 let virtualAccountId: string
 let indempotencyKey: string
@@ -311,8 +310,6 @@ describe('API Spec', () => {
 
             expect(transfer).toBeDefined()
             expect(transfer.id).toBeDefined()
-
-            failedTransferId = transfer.id
         })
 
         it('should list transfers', async () => {
