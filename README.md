@@ -49,18 +49,27 @@ pnpm add flutterwave-node-v4
 ### Quick Start
 
 ```typescript
-import { Flutterwave } from 'flutterwave-node-v4';
+import { Flutterwave } from 'flutterwave-node-v4'
 
-// Initialize the SDK
+// Initialize with individual parameters
 const flutterwave = new Flutterwave(
   'your_client_id',
   'your_client_secret',
   'your_encryption_key', // optional
-);
+  'sandbox' // 'sandbox' or 'live'
+)
+
+// Or initialize with options object
+const flutterwave = new Flutterwave({
+  clientId: 'your_client_id',
+  clientSecret: 'your_client_secret',
+  encryptionKey: 'your_encryption_key', // optional
+  environment: 'sandbox' // 'sandbox' or 'live'
+})
 
 // Make your first API call
-const banks = await flutterwave.api.banks.list('NG');
-console.log(banks);
+const banks = await flutterwave.api.banks.list('NG')
+console.log(banks)
 ```
 
 ### Configuration
@@ -72,15 +81,25 @@ The SDK can be configured using environment variables or by passing options dire
 // CLIENT_ID=your_client_id
 // CLIENT_SECRET=your_client_secret
 // ENCRYPTION_KEY=your_encryption_key
+// ENVIRONMENT=sandbox  # or 'live'
 
 const flutterwave = new Flutterwave();
 
-// Or pass credentials directly
+// Pass credentials as individual parameters
 const flutterwave = new Flutterwave(
   'your_client_id',
   'your_client_secret',
   'your_encryption_key', // optional
+  'sandbox' // optional: 'sandbox' or 'live', defaults to 'live'
 );
+
+// Or pass as an options object
+const flutterwave = new Flutterwave({
+  clientId: 'your_client_id',
+  clientSecret: 'your_client_secret',
+  encryptionKey: 'your_encryption_key', // optional
+  environment: 'sandbox' // optional: 'sandbox' or 'live', defaults to 'live'
+});
 ```
 
 ## Authentication

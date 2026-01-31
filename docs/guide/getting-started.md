@@ -41,14 +41,32 @@ Never expose your client secret or encryption key in client-side code or public 
 
 ### 2. Initialize the SDK
 
+The SDK supports two initialization methods:
+
+**Method 1: Individual Parameters**
+
 ```typescript
-import { Flutterwave } from 'flutterwave-node-v4';
+import { Flutterwave } from 'flutterwave-node-v4'
 
 const flutterwave = new Flutterwave(
   'your_client_id',
   'your_client_secret',
   'your_encryption_key', // optional
-);
+  'sandbox' // optional: 'sandbox' or 'live'
+)
+```
+
+**Method 2: Options Object**
+
+```typescript
+import { Flutterwave } from 'flutterwave-node-v4'
+
+const flutterwave = new Flutterwave({
+  clientId: 'your_client_id',
+  clientSecret: 'your_client_secret',
+  encryptionKey: 'your_encryption_key', // optional
+  environment: 'sandbox' // optional: 'sandbox' or 'live'
+})
 ```
 
 ### 3. Make Your First API Call
@@ -84,6 +102,7 @@ For better security, it's recommended to use environment variables for your cred
 CLIENT_ID=your_client_id
 CLIENT_SECRET=your_client_secret
 ENCRYPTION_KEY=your_encryption_key
+ENVIRONMENT=sandbox  # or 'live'
 ```
 
 ### 2. Install dotenv (optional)

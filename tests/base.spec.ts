@@ -140,13 +140,53 @@ describe('Base Spec', () => {
 
     describe('Flutterwave', () => {
         it('should set and get environment correctly', () => {
-            // process.env.ENVIRONMENT = 'live'
-            // const flutterwaveInstance2 = new Flutterwave()
-            // expect(flutterwaveInstance2.getEnvironment()).toBe('live')
+            process.env.ENVIRONMENT = 'live'
+            const flutterwaveInstance2 = new Flutterwave()
+            expect(flutterwaveInstance2.getEnvironment()).toBe('live')
 
-            // process.env.ENVIRONMENT = 'sandbox'
-            // const flutterwaveInstance1 = new Flutterwave()
-            // expect(flutterwaveInstance1.getEnvironment()).toBe('sandbox')
+            process.env.ENVIRONMENT = 'sandbox'
+            const flutterwaveInstance1 = new Flutterwave()
+            expect(flutterwaveInstance1.getEnvironment()).toBe('sandbox')
+        })
+
+        it('should set debug level correctly', () => {
+            const flutterwaveInstance = new Flutterwave()
+            flutterwaveInstance.debug(2)
+
+            expect(flutterwaveInstance.debugLevel).toBe(2)
+        })
+
+        it('should throw error if clientId or clientSecret is missing', () => {
+            process.env.CLIENT_ID = ''
+            process.env.CLIENT_SECRET = ''
+
+            expect(() => new Flutterwave()).toThrow('Client ID and Client Secret are required to initialize Flutterwave instance')
+        })
+
+        it('should initialize Flutterwave instance with InitOptions', () => {
+            const flutterwaveInstance = new Flutterwave({
+                clientId: 'test_client_id',
+                clientSecret: 'test_client_secret',
+                environment: 'sandbox',
+            })
+
+            expect(flutterwaveInstance).toBeInstanceOf(Flutterwave)
+            expect(flutterwaveInstance.getEnvironment()).toBe('sandbox')
+            expect(Builder.baseUrl()).toContain('developersandbox-api.flutterwave.com')
+        })
+
+        it('should initialize Flutterwave instance with individual parameters', () => {
+            process.env.ENVIRONMENT = ''
+            const flutterwaveInstance = new Flutterwave(
+                'test_client_id',
+                'test_client_secret',
+                'test_encryption_key',
+                'live'
+            )
+
+            expect(flutterwaveInstance).toBeInstanceOf(Flutterwave)
+            expect(flutterwaveInstance.getEnvironment()).toBe('live')
+            expect(Builder.baseUrl()).toContain('api.flutterwave.com')
         })
     })
 })

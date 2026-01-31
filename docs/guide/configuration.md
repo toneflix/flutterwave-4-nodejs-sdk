@@ -68,6 +68,20 @@ Used for server-side authentication. Keep this secure and never expose it in cli
 
 Used for encrypting sensitive data like card details in API requests.
 
+### environment
+
+- **Type**: `'sandbox' | 'live'`
+- **Default**: `'live'`
+- **Environment Variable**: `ENVIRONMENT`
+- **Description**: The environment to use
+
+- `sandbox`: For testing and development (uses `developersandbox-api.flutterwave.com`)
+- `live`: For production transactions (uses `api.flutterwave.com`)
+
+::: warning
+Always use the sandbox environment during development and testing. Switch to live only when you're ready to process real transactions.
+:::
+
 ## Environment-Specific Configuration
 
 ### Development Environment
@@ -77,6 +91,7 @@ Used for encrypting sensitive data like card details in API requests.
 CLIENT_ID=your_test_client_id
 CLIENT_SECRET=your_test_client_secret
 ENCRYPTION_KEY=your_test_encryption_key
+ENVIRONMENT=sandbox
 ```
 
 ### Production Environment
@@ -86,6 +101,7 @@ ENCRYPTION_KEY=your_test_encryption_key
 CLIENT_ID=your_production_client_id
 CLIENT_SECRET=your_production_client_secret
 ENCRYPTION_KEY=your_production_encryption_key
+ENVIRONMENT=live
 ```
 
 ## Advanced Configuration

@@ -12,7 +12,21 @@ export class Builder {
         sandbox: 'https://developersandbox-api.flutterwave.com/',
     }
 
+    /**
+     * Flutterwave Environment
+     */
+    static environment?: 'sandbox' | 'live'
+
     constructor() { }
+
+    /**
+     * Sets the environment for the builder
+     * 
+     * @param env
+     */
+    static setEnvironment (env: 'sandbox' | 'live') {
+        this.environment = env
+    }
 
     /**
      * Gets the base url based on environment
@@ -20,7 +34,7 @@ export class Builder {
      * @returns 
      */
     static baseUrl () {
-        const env = process.env.ENVIRONMENT || 'sandbox'
+        const env = process.env.ENVIRONMENT || this.environment || 'sandbox'
 
         if (env === 'live') {
             return this.baseUrls.live
