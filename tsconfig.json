@@ -11,7 +11,7 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "paths": {
-      "@toneflix/flutterwave/contracts": ["./src/Contracts/index.ts"]
+      "flutterwave-node-v4/contracts": ["./src/Contracts/index.ts"]
     }
   },
   "include": ["./**/*.d.ts", "./**/*", "./src/*"],
