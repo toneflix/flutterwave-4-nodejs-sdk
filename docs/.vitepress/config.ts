@@ -67,7 +67,9 @@ export default defineConfig({
         ],
 
         socialLinks: [
-            { icon: 'github', link: 'https://github.com/toneflix/flutterwave-4-nodejs-sdk' }
+            { icon: 'github', link: 'https://github.com/toneflix/flutterwave-4-nodejs-sdk' },
+            { icon: 'twitter', link: 'https://twitter.com/toneflixx' },
+            { icon: 'npm', link: 'https://www.npmjs.com/package/flutterwave-node-v4' }
         ],
 
         footer: {
