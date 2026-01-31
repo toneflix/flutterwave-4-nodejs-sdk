@@ -4,7 +4,27 @@ export default defineConfig({
     title: 'Flutterwave Node.js SDK',
     description: 'Unofficial Flutterwave v4 API SDK for Node.js',
     base: '/',
-
+    head: [
+        ['link', { rel: 'icon', href: 'https://flutterwave.toneflix.net/banner.png' }],
+        ['meta', { name: 'viewport', content: 'width=device-width, initial-scale=1.0' }],
+        ['meta', { name: 'theme-color', content: '#0d1117' }],
+        ['meta', { name: 'apple-mobile-web-app-capable', content: 'yes' }],
+        ['meta', { name: 'apple-mobile-web-app-status-bar-style', content: 'black' }],
+        ['link', { rel: 'apple-touch-icon', href: 'https://flutterwave.toneflix.net/banner.png' }],
+        ['link', { rel: 'mask-icon', href: 'https://flutterwave.toneflix.net/banner.png', color: '#0d1117' }],
+        ['meta', { name: 'msapplication-TileImage', content: 'https://flutterwave.toneflix.net/banner.png' }],
+        ['meta', { property: 'og:title', content: 'Flutterwave Node.js SDK' }],
+        ['meta', { property: 'og:description', content: 'Unofficial Flutterwave v4 API SDK for Node.js' }],
+        ['meta', { property: 'og:image', content: 'https://flutterwave.toneflix.net/banner.png' }],
+        ['meta', { property: 'og:url', content: 'https://flutterwave.toneflix.net' }],
+        ['meta', { name: 'og:type', content: 'website' }],
+        ['meta', { property: 'twitter:card', content: 'summary_large_image' }],
+        ['meta', { name: 'twitter:title', content: 'Flutterwave Node.js SDK' }],
+        ['meta', { name: 'twitter:description', content: 'Unofficial Flutterwave v4 API SDK for Node.js' }],
+        ['meta', { name: 'twitter:image', content: 'https://flutterwave.toneflix.net/banner.png' }],
+        ['meta', { name: 'twitter:site', content: '@toneflixx' }],
+        ['meta', { name: 'twitter:creator', content: '@toneflixx' }],
+    ],
     themeConfig: {
         logo: '/logo.png',
 
