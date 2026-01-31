@@ -18,7 +18,7 @@ export class Chargebacks {
      * @method GET
      */
     async list (
-        query: ChargebacksListQueryParams,
+        query: ChargebacksListQueryParams = {},
         traceId?: string
     ): Promise<{ data: ChargebacksApiResponse[], meta: ChargebacksMeta }> {
 
@@ -40,14 +40,14 @@ export class Chargebacks {
      * 
      * @param formData 
      * @param traceId 
-     * @param idempotencyKey 
+     * @param indempotencyKey 
      * @method POST
      * @returns 
      */
     async create (
         formData: ChargebackCreateFormData,
         traceId?: string,
-        idempotencyKey?: string
+        indempotencyKey?: string
     ): Promise<ChargebacksApiResponse> {
         await this.#flutterwave.ensureTokenIsValid()
 
@@ -55,7 +55,7 @@ export class Chargebacks {
             this.#flutterwave.builder.buildTargetUrl('/chargebacks'),
             'POST',
             formData,
-            { 'X-Trace-Id': traceId, 'X-Idempotency-Key': idempotencyKey }
+            { 'X-Trace-Id': traceId, 'X-Idempotency-Key': indempotencyKey }
         )
 
         return data
@@ -90,7 +90,7 @@ export class Chargebacks {
      * @param id 
      * @param formData 
      * @param traceId 
-     * @param idempotencyKey 
+     * @param indempotencyKey 
      * @method PUT
      * @returns 
      */
@@ -98,7 +98,7 @@ export class Chargebacks {
         id: string,
         formData: ChargebackUpdateFormData,
         traceId?: string,
-        idempotencyKey?: string
+        indempotencyKey?: string
     ): Promise<ChargebacksApiResponse> {
         await this.#flutterwave.ensureTokenIsValid()
 
@@ -106,7 +106,7 @@ export class Chargebacks {
             this.#flutterwave.builder.buildTargetUrl('/chargebacks/{id}', { id }),
             'PUT',
             formData,
-            { 'X-Trace-Id': traceId, 'X-Idempotency-Key': idempotencyKey }
+            { 'X-Trace-Id': traceId, 'X-Idempotency-Key': indempotencyKey }
         )
 
         return data

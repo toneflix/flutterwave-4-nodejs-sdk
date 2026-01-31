@@ -1,8 +1,9 @@
 import { Authorization, BillingDetails, FeeDetails, IPaymentMethod } from '../Payment'
-import { BaseListQueryParams, NextAction, XGenericObject } from '../Interfaces'
+import { BaseListQueryParams, XGenericObject } from '../Interfaces'
 
 import { CurrencyCode } from '../Codes'
 import { FlutterwaveResponseStatus } from '../FlutterwaveResponse'
+import { NextAction } from '../Actions'
 
 export interface ChargebacksMeta {
     page_info: {
@@ -55,7 +56,7 @@ export interface ICharge {
     settlement_id: string[]
     meta: XGenericObject
     next_action: NextAction
-    payment_method_details: IPaymentMethod,
+    payment_method_details: IPaymentMethod
     redirect_url: string
     refunded: boolean
     reference: string

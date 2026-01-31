@@ -1,4 +1,7 @@
+import { FeesRetrieveQueryParams, ITransactionFee } from '../Contracts/Api/FeesApi'
+
 import { Flutterwave } from '../Flutterwave'
+import { Http } from '../Http'
 
 export class Fees {
     #flutterwave: Flutterwave
@@ -10,7 +13,23 @@ export class Fees {
     /**
      * Retrieve transaction fees
      * 
+     * @param query Query parameters for retrieving fees
      * @method GET
      */
-    retrieve () { }
+    async retrieve (
+        query: FeesRetrieveQueryParams,
+        traceId?: string
+    ): Promise<ITransactionFee> {
+
+        await this.#flutterwave.ensureTokenIsValid()
+
+        const { data } = await Http.send<ITransactionFee>(
+            this.#flutterwave.builder.buildTargetUrl('fees', {}, query),
+            'GET',
+            {},
+            { 'X-Trace-Id': traceId }
+        )
+
+        return data
+    }
 }

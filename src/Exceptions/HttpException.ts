@@ -4,9 +4,17 @@ import { UnauthorizedRequestException } from './UnauthorizedRequestException'
 import { UnifiedFlutterwaveResponse } from '../Contracts/FlutterwaveResponse'
 
 export class HttpException extends Error {
-    constructor(public data: UnifiedFlutterwaveResponse) {
+    statusCode: number = 500
+    parent?: Error
+
+    constructor(public data: UnifiedFlutterwaveResponse, statusCode?: number, parent?: Error) {
         super(data.message)
         this.name = 'HttpException'
+        this.parent = parent
+
+        if (statusCode) {
+            this.statusCode = statusCode
+        }
     }
 
     /**
@@ -15,7 +23,7 @@ export class HttpException extends Error {
      * @param code 
      * @param data 
      */
-    static fromCode (code: number, data: Required<UnifiedFlutterwaveResponse>) {
+    static fromCode (code: number, data: Required<UnifiedFlutterwaveResponse>, parent?: Error) {
         switch (code) {
             case 400:
                 return new BadRequestException(data)
@@ -24,7 +32,7 @@ export class HttpException extends Error {
             case 403:
                 return new ForbiddenRequestException(data)
             default:
-                return new HttpException(data)
+                return new HttpException(data, code, parent)
         }
     }
 }

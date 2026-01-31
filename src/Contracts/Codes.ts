@@ -17,3 +17,7 @@ export type CurrencyCode =
 export type CountryCode =
     | 'CM' | 'CI' | 'CG' | 'EG' | 'ET' | 'GA' | 'GH' | 'IN' | 'KE' | 'MW' | 'NG' | 'RW'
     | 'SL' | 'SN' | 'TD' | 'TZ' | 'UG' | 'US' | 'ZA' | 'ZM'
+
+export type CountryCodeRestricted =
+    | 'CG' | 'CM' | 'CI' | 'EG' | 'ET' | 'GA' | 'GH' | 'KE' | 'MW' | 'RW' | 'SN' | 'TZ' | 'TD'
+    | 'UG' | 'ZM'

@@ -17,7 +17,7 @@ export class Customers {
      * @method GET
      */
     async list (
-        query: BaseListQueryParams,
+        query: BaseListQueryParams = {},
         traceId?: string
     ): Promise<{ data: ICustomer[], meta: PageInfoMeta }> {
 
@@ -39,7 +39,7 @@ export class Customers {
      * 
      * @param formData 
      * @param traceId 
-     * @param idempotencyKey 
+     * @param indempotencyKey 
      * @method POST
      * @returns 
      */
@@ -119,7 +119,7 @@ export class Customers {
      */
     async search (
         formData: { email: string },
-        query: BaseListQueryParams,
+        query: BaseListQueryParams = {},
         traceId?: string
     ): Promise<{ data: ICustomer[], meta: PageInfoMeta }> {
 

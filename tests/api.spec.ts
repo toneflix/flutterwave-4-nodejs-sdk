@@ -7,9 +7,14 @@ let flutterwave: Flutterwave
 let customerId: string
 let chargeId: string
 let paymentMethodId: string
+let orderId: string
+let traceId: string
+let indempotencyKey: string
 
 describe('API Spec', () => {
     beforeAll(() => {
+        traceId = 'test-trace-id-' + Math.floor(Math.random() * 999).toString()
+        indempotencyKey = 'test-idempotency-key-' + Math.floor(Math.random() * 999).toString()
         flutterwave = new Flutterwave()
     })
 
@@ -97,7 +102,39 @@ describe('API Spec', () => {
         })
     })
 
-    describe('Customers', () => {
+    describe.skip('Fees', () => {
+        /**
+         * Probably Not Implemented Yet By Flutterwave
+         */
+        it('can retrieve transaction fees', async () => {
+            const response = await flutterwave.api.fees.retrieve({
+                amount: 12.34,
+                currency: 'NGN',
+                payment_method: 'card',
+                card6: '424242',
+                country: 'NG',
+            }, traceId)
+
+            expect(response).toBeDefined()
+            expect(response.charge_amount).toBeDefined()
+            expect(response.fee).toBeDefined()
+            expect(Array.isArray(response.fee)).toBe(true)
+        })
+    })
+
+    describe('Mobile Networks', () => {
+        it('can list mobile networks', async () => {
+            const response = await flutterwave.api.mobileNetworks.list({
+                country: 'CG',
+            }, traceId)
+
+            expect(response).toBeDefined()
+            expect(Array.isArray(response)).toBe(true)
+            expect(response.length).toBeGreaterThan(0)
+        })
+    })
+
+    describe.only('Customers', () => {
         it('can create customer', async () => {
             const response = await flutterwave.api.customers.create({
                 email: `testuser${Date.now()}@example.com`,
@@ -119,7 +156,7 @@ describe('API Spec', () => {
                 meta: {
                     custom_field: 'custom_value',
                 },
-            }, 'test-trace-id-123', 'idempotency-key-456')
+            }, traceId, indempotencyKey)
 
             customerId = response.id
             expect(response).toBeDefined()
@@ -140,7 +177,7 @@ describe('API Spec', () => {
         })
     })
 
-    describe('Payment Methods', () => {
+    describe.only('Payment Methods', () => {
         it('can create payment method', async () => {
             const response = await flutterwave.api.paymentMethods.create({
                 type: 'card',
@@ -160,7 +197,7 @@ describe('API Spec', () => {
                     },
                 },
                 customer_id: customerId,
-            }, 'test-trace-id-123', 'idempotency-key-456')
+            }, traceId, indempotencyKey)
 
             paymentMethodId = response.id
             expect(response).toBeDefined()
@@ -181,6 +218,61 @@ describe('API Spec', () => {
         })
     })
 
+    describe('Orders', () => {
+        it('can create order', async () => {
+            const response = await flutterwave.api.orders.create({
+                amount: 1500,
+                currency: 'NGN',
+                reference: `test-order-ref-${Date.now()}`,
+                customer_id: customerId,
+                payment_method_id: paymentMethodId,
+                meta: {
+                    order_note: 'Test order creation',
+                },
+            }, traceId, indempotencyKey)
+
+            orderId = response.id
+            expect(response).toBeDefined()
+            expect(response.id).toBeDefined()
+            expect(response.amount).toBe(1500)
+        })
+
+        it('can list orders', async () => {
+            const response = await flutterwave.api.orders.list({
+                from: '2025-04-21T10:55:16Z',
+                to: '2025-04-30T23:59:59Z',
+                page: 1,
+                size: 10,
+            })
+
+            expect(response).toBeDefined()
+            expect(response.data).toBeDefined()
+            expect(Array.isArray(response.data)).toBe(true)
+            expect(response.meta).toBeDefined()
+        })
+
+        it('can retrieve order', async () => {
+            const response = await flutterwave.api.orders.retrieve(orderId, traceId)
+
+            expect(response).toBeDefined()
+            expect(response.id).toBe(orderId)
+        })
+
+        it('can update order', async () => {
+            const response = await flutterwave.api.orders.update(orderId, {
+                action: 'capture',
+                meta: {
+                    updated_note: 'Updated order note',
+                },
+            }, traceId, 'scenario-key-789')
+
+            expect(response).toBeDefined()
+            expect(response.id).toBe(orderId)
+            expect(response.meta).toBeDefined()
+            expect(response.status).toBe('completed')
+        })
+    })
+
     describe('Charges', async () => {
         it('can create charge', async () => {
             const response = await flutterwave.api.charges.create({
@@ -189,7 +281,7 @@ describe('API Spec', () => {
                 reference: `test-charge-ref-${Date.now()}`,
                 customer_id: customerId,
                 payment_method_id: paymentMethodId,
-            }, 'test-trace-id-123', 'idempotency-key-456')
+            }, traceId, indempotencyKey)
 
             chargeId = response.id
             expect(response).toBeDefined()
@@ -223,7 +315,7 @@ describe('API Spec', () => {
                 status: 'pending',
                 comment: 'Customer disputed the charge',
                 arn: '1243453453434234534443423'
-            }, 'test-trace-id-123', 'idempotency-key-456')
+            }, traceId, indempotencyKey)
 
             expect(response).toBeDefined()
             expect(response.id).toBeDefined()

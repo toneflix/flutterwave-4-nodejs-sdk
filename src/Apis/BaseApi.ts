@@ -1,10 +1,13 @@
+import { BadRequestException } from '../Exceptions/BadRequestException'
 import { Banks } from './Banks'
 import { Chargebacks } from './Chargebacks'
 import { Charges } from './Charges'
 import { Customers } from './Customers'
 import { Fees } from './Fees'
 import { Flutterwave } from '../Flutterwave'
+import { ForbiddenRequestException } from '../Exceptions/ForbiddenRequestException'
 import { Http } from '../Http'
+import { HttpException } from '../Exceptions/HttpException'
 import { MobileNetworks } from './MobileNetworks'
 import { Orchestration } from './Orchestration'
 import { Orders } from './Orders'
@@ -16,6 +19,7 @@ import { Settlements } from './Settlements'
 import { TransferRecipients } from './TransferRecipients'
 import { TransferSenders } from './TransferSenders'
 import { Transfers } from './Transfers'
+import { UnauthorizedRequestException } from '../Exceptions/UnauthorizedRequestException'
 import { VirtualAccounts } from './VirtualAccounts'
 import { Wallets } from './Wallets'
 
@@ -115,6 +119,11 @@ export class BaseApi {
      */
     wallets!: Wallets
 
+    private lastException?:
+        BadRequestException |
+        ForbiddenRequestException |
+        UnauthorizedRequestException |
+        HttpException
 
     /**
      * Create a BaseApi instance
@@ -123,6 +132,34 @@ export class BaseApi {
      */
     constructor(flutterwave?: Flutterwave) {
         this.#flutterwave = flutterwave ?? new Flutterwave()
+    }
+
+    /**
+     * Get the last exception
+     * 
+     * @returns 
+     */
+    getLastException ():
+        BadRequestException |
+        ForbiddenRequestException |
+        UnauthorizedRequestException |
+        HttpException | undefined {
+        return this.lastException
+    }
+
+    /**
+     * Set the last exception
+     * 
+     * @param exception 
+     */
+    setLastException (
+        exception:
+            BadRequestException |
+            ForbiddenRequestException |
+            UnauthorizedRequestException |
+            HttpException
+    ) {
+        this.lastException = exception
     }
 
     /**
@@ -136,6 +173,8 @@ export class BaseApi {
         Http.setDebugLevel(flutterwave.debugLevel)
 
         const baseApi = new BaseApi(flutterwave)
+
+        Http.setApiInstance(baseApi)
 
         baseApi.banks = new Banks(baseApi.#flutterwave)
         baseApi.charges = new Charges(baseApi.#flutterwave)

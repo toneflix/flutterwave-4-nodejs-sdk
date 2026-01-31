@@ -9,6 +9,12 @@ export interface BaseListQueryParams {
     size?: number
 }
 
+export interface IMobileNetwork {
+    id: string
+    network: string
+    name: string
+}
+
 export interface IAddress {
     city: string
     country: CountryCode
@@ -34,9 +40,7 @@ export interface WebhookValidatorOptions {
     encoding?: 'base64' | 'hex';
 }
 
-export interface NextAction {
-    type: 'redirect_url'
-    redirect_url: {
-        url: string
-    }
-} 
+export interface IAuthorization {
+    '3ds': XGenericObject
+    type: '3ds'
+}

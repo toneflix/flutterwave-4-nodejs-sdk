@@ -17,7 +17,7 @@ export class Charges {
      * @method GET
      */
     async list (
-        query: ChargesListQueryParams,
+        query: ChargesListQueryParams = {},
         traceId?: string
     ): Promise<{ data: ICharge[], meta: PageInfoMeta }> {
 
@@ -39,7 +39,7 @@ export class Charges {
      * 
      * @param formData 
      * @param traceId 
-     * @param idempotencyKey 
+     * @param indempotencyKey 
      * @method POST
      * @returns 
      */
@@ -90,7 +90,7 @@ export class Charges {
      * @param id 
      * @param formData 
      * @param traceId 
-     * @param idempotencyKey 
+     * @param indempotencyKey 
      * @method PUT
      * @returns 
      */

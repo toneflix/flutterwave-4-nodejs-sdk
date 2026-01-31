@@ -17,7 +17,7 @@ export class PaymentMethods {
      * @method GET
      */
     async list (
-        query: BaseListQueryParams,
+        query: BaseListQueryParams = {},
         traceId?: string
     ): Promise<{ data: IPaymentMethod[], meta: PageInfoMeta }> {
 
@@ -39,7 +39,7 @@ export class PaymentMethods {
      * 
      * @param formData 
      * @param traceId 
-     * @param idempotencyKey 
+     * @param indempotencyKey 
      * @method POST
      * @returns 
      */

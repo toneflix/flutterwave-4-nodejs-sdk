@@ -2,6 +2,7 @@ import './utilities/global'
 
 import axios, { RawAxiosRequestHeaders } from 'axios'
 
+import { BaseApi } from './Apis/BaseApi'
 import { Builder } from './Builder'
 import { HttpException } from './Exceptions/HttpException'
 import { UnifiedFlutterwaveResponse } from './Contracts/FlutterwaveResponse'
@@ -17,6 +18,8 @@ export class Http {
      * Debug level
      */
     private static debugLevel: number = 0
+
+    private static apiInstance: BaseApi
 
     /**
      * Creates an instance of Http.
@@ -38,6 +41,15 @@ export class Http {
      */
     static setDebugLevel (level: number = 0) {
         this.debugLevel = level ?? 0
+    }
+
+    /**
+     * Set the API instance
+     * 
+     * @param api 
+     */
+    static setApiInstance (api: BaseApi) {
+        this.apiInstance = api
     }
 
     /**
@@ -123,7 +135,7 @@ export class Http {
             }
         } catch (e: any) {
             const error = (e.response?.data ?? {}) as Record<string, any>
-            throw this.exception(e.response?.status ?? 500, error || e)
+            throw this.exception(e.response?.status ?? 500, error || e, e)
         }
     }
 
@@ -134,8 +146,8 @@ export class Http {
      * @param error 
      * @returns 
      */
-    private static exception (status: number, error: any) {
-        return HttpException.fromCode(status, {
+    private static exception (status: number, error: any, originalError: Error): Error {
+        const exception = HttpException.fromCode(status, {
             success: false,
             message: `Request failed: ${error.error?.message || 'An error occurred'}`,
             status: 'failed',
@@ -147,6 +159,12 @@ export class Http {
                 message: error.error?.message ?? error.error_description ?? error.message,
                 validation_errors: error.error?.validation_errors ?? []
             },
-        })
+        }, originalError)
+
+        if (this.apiInstance) {
+            this.apiInstance.setLastException(exception)
+        }
+
+        return exception
     }
 }
