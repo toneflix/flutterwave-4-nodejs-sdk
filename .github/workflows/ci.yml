@@ -42,6 +42,16 @@ jobs:
 
       - name: Run tests
         run: pnpm test
+        env:
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+          ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY }}
+          SECRET_HASH: ${{ secrets.SECRET_HASH }}
+          ENVIRONMENT: 'sandbox'
+
+      - name: Build project
+        run: pnpm build
+
   build-docs:
     name: Build Documentation
     runs-on: ubuntu-latest

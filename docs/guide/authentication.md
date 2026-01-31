@@ -496,28 +496,28 @@ describe('Authentication Integration', () => {
 
 #### Invalid Client Credentials
 
-```
+```md
 Error: Authentication failed
 Solution: Verify your client ID and client secret are correct
 ```
 
 #### Wrong Environment
 
-```
+```md
 Error: API calls failing in production
 Solution: Ensure you're using live credentials with environment: 'live'
 ```
 
 #### Missing Encryption Key
 
-```
+```md
 Error: Encryption key required for card operations
 Solution: Add encryptionKey to your configuration
 ```
 
 #### Token Expired
 
-```
+```md
 Error: Token expired
 Solution: The SDK handles this automatically, but you can manually call:
 await flutterwave.generateAccessToken();
