@@ -1,6 +1,6 @@
 import { Flutterwave } from '../Flutterwave'
 import { Http } from '../Http'
-import { IRefundCompletedWebhookPayload } from '../Contracts/Api/RefundCompletedApi'
+import { IRefundCompletedWebhookPayload } from '../Contracts/Api/RefundsApi'
 
 /**
  * Send refund completion webhook

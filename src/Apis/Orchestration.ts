@@ -34,7 +34,10 @@ export class Orchestration {
          * Encrypt card details if type is card
          */
         if (formData.payment_method.type === 'card') {
-            formData.payment_method.card = await Builder.encryptCardDetails(formData.payment_method.card)
+            Object.assign(
+                formData.payment_method.card,
+                await Builder.encryptCardDetails(formData.payment_method.card)
+            )
         }
 
         const { data } = await Http.send<ICharge>(

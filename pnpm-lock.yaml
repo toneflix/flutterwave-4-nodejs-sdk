@@ -27,6 +27,9 @@ importers:
       '@eslint/markdown':
         specifier: ^7.5.1
         version: 7.5.1
+      '@faker-js/faker':
+        specifier: ^10.2.0
+        version: 10.2.0
       '@swc/core':
         specifier: ^1.6.1
         version: 1.15.11
@@ -50,7 +53,7 @@ importers:
         version: 8.54.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
       vite-tsconfig-paths:
         specifier: ^5.1.4
-        version: 5.1.4(typescript@5.9.3)(vite@7.3.1(@types/node@20.19.30)(jiti@2.6.1)(tsx@4.21.0))
+        version: 5.1.4(typescript@5.9.3)(vite@5.4.21(@types/node@20.19.30))
       vitepress:
         specifier: ^1.5.0
         version: 1.6.4(@algolia/client-search@5.47.0)(@types/node@20.19.30)(axios@1.13.4)(postcss@8.5.6)(search-insights@2.17.3)(typescript@5.9.3)
@@ -586,6 +589,10 @@ packages:
   '@eslint/plugin-kit@0.4.1':
     resolution: {integrity: sha512-43/qtrDUokr7LJqoF2c3+RInu/t4zfrpYdoSDfYyhg52rwLV6TnOvdG4fXm7IkSB3wErkcmJS9iEhjVtOSEjjA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
+  '@faker-js/faker@10.2.0':
+    resolution: {integrity: sha512-rTXwAsIxpCqzUnZvrxVh3L0QA0NzToqWBLAhV+zDV3MIIwiQhAZHMdPCIaj5n/yADu/tyk12wIPgL6YHGXJP+g==}
+    engines: {node: ^20.19.0 || ^22.13.0 || ^23.5.0 || >=24.0.0, npm: '>=10'}
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -3076,6 +3083,8 @@ snapshots:
       '@eslint/core': 0.17.0
       levn: 0.4.1
 
+  '@faker-js/faker@10.2.0': {}
+
   '@humanfs/core@0.19.1': {}
 
   '@humanfs/node@0.16.7':
@@ -5067,13 +5076,13 @@ snapshots:
       - tsx
       - yaml
 
-  vite-tsconfig-paths@5.1.4(typescript@5.9.3)(vite@7.3.1(@types/node@20.19.30)(jiti@2.6.1)(tsx@4.21.0)):
+  vite-tsconfig-paths@5.1.4(typescript@5.9.3)(vite@5.4.21(@types/node@20.19.30)):
     dependencies:
       debug: 4.4.3
       globrex: 0.1.2
       tsconfck: 3.1.6(typescript@5.9.3)
     optionalDependencies:
-      vite: 7.3.1(@types/node@20.19.30)(jiti@2.6.1)(tsx@4.21.0)
+      vite: 5.4.21(@types/node@20.19.30)
     transitivePeerDependencies:
       - supports-color
       - typescript

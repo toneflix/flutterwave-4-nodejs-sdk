@@ -67,8 +67,8 @@ export interface UnifiedFlutterwaveResponse<T = any, M extends XGenericObject = 
 }
 
 export interface CursorPagination {
-    next: string
-    previous: string
+    next?: string
+    previous?: string
     limit: number
     total: number
     has_more_items: boolean

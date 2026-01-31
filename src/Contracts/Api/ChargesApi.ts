@@ -67,3 +67,13 @@ export interface ICharge {
     },
     created_datetime: string
 }
+
+export interface IChargeSummary {
+    id: string
+    currency: CurrencyCode
+    customer_id: string
+    charge_date: string
+    charged_amount: number
+    settlement_amount: number
+    payment_method_id: string
+}

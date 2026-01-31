@@ -58,7 +58,7 @@ export class PaymentMethods {
          * Encrypt card details if type is card
          */
         if (formData.type === 'card') {
-            formData.card = await Builder.encryptCardDetails(formData.card)
+            Object.assign(formData.card, await Builder.encryptCardDetails(formData.card))
         }
 
         const { data } = await Http.send<IPaymentMethod>(

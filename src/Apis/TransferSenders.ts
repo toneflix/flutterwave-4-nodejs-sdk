@@ -1,4 +1,7 @@
+import { CursorPagination, ITransferSender, ITransferSenderCreateForm, TransferSendersListQueryParams } from '../Contracts'
+
 import { Flutterwave } from '../Flutterwave'
+import { Http } from '../Http'
 
 export class TransferSenders {
     #flutterwave: Flutterwave
@@ -12,15 +15,44 @@ export class TransferSenders {
      * 
      * @method GET
      */
-    list () { }
+    async list (
+        query: TransferSendersListQueryParams = {},
+        traceId?: string
+    ): Promise<{ data: ITransferSender[], cursor: CursorPagination }> {
+        await this.#flutterwave.ensureTokenIsValid()
+
+        const { data } = await Http.send<{ senders: ITransferSender[], cursor: CursorPagination }>(
+            this.#flutterwave.builder.buildTargetUrl('/transfers/senders', {}, query),
+            'GET',
+            {},
+            { 'X-Trace-Id': traceId }
+        )
+
+        return { data: data.senders, cursor: data.cursor }
+    }
 
     /**
      * Create a transfer sender
      * 
-     * @param query  
+     * @param formData  
      * @method POST
      */
-    create () { }
+    async create (
+        formData: ITransferSenderCreateForm,
+        traceId?: string,
+        indempotencyKey?: string
+    ): Promise<ITransferSender> {
+        await this.#flutterwave.ensureTokenIsValid()
+
+        const { data } = await Http.send<ITransferSender>(
+            this.#flutterwave.builder.buildTargetUrl('/transfers/senders'),
+            'POST',
+            formData,
+            { 'X-Trace-Id': traceId, 'X-Idempotency-Key': indempotencyKey }
+        )
+
+        return data
+    }
 
     /**
      * Retrieve a transfer sender
@@ -28,7 +60,21 @@ export class TransferSenders {
      * @param id  
      * @method GET
      */
-    retrieve (id: string) { }
+    async retrieve (
+        id: string,
+        traceId?: string
+    ): Promise<ITransferSender> {
+        await this.#flutterwave.ensureTokenIsValid()
+
+        const { data } = await Http.send<ITransferSender>(
+            this.#flutterwave.builder.buildTargetUrl('/transfers/senders/{id}', { id }),
+            'GET',
+            {},
+            { 'X-Trace-Id': traceId }
+        )
+
+        return data
+    }
 
     /**
      * Delete a transfer sender
@@ -36,5 +82,17 @@ export class TransferSenders {
      * @param id 
      * @method DELETE
      */
-    delete (id: string) { }
+    async delete (
+        id: string,
+        traceId?: string
+    ): Promise<void> {
+        await this.#flutterwave.ensureTokenIsValid()
+
+        await Http.send<void>(
+            this.#flutterwave.builder.buildTargetUrl('/transfers/senders/{id}', { id }),
+            'DELETE',
+            {},
+            { 'X-Trace-Id': traceId }
+        )
+    }
 }

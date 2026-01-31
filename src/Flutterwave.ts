@@ -91,6 +91,8 @@ export class Flutterwave {
     debug (level: number = 0): this {
         this.debugLevel = level
 
+        Http.setDebugLevel(level)
+
         return this
     }
 

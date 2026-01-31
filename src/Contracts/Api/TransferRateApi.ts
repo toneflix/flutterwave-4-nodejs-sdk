@@ -1,6 +1,3 @@
-import { Authorization, IPaymentMethodCreateFormData } from '../Payment'
-import { IAddress, IPersonName, IPhoneNumber, XGenericObject } from '../Interfaces'
-
 import { CurrencyCode } from '../Codes'
 
 export interface IAmount {

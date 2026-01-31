@@ -9,6 +9,7 @@ let chargeId: string
 let paymentMethodId: string
 let orderId: string
 let traceId: string
+let refundId: string
 let indempotencyKey: string
 
 describe('API Spec', () => {
@@ -102,7 +103,7 @@ describe('API Spec', () => {
         })
     })
 
-    describe.skip('Fees', () => {
+    describe('Fees', () => {
         /**
          * Probably Not Implemented Yet By Flutterwave
          */
@@ -271,7 +272,7 @@ describe('API Spec', () => {
         })
     })
 
-    describe('Charges', async () => {
+    describe.only('Charges', async () => {
         it('can create charge', async () => {
             const response = await flutterwave.api.charges.create({
                 amount: 1000,
@@ -302,7 +303,7 @@ describe('API Spec', () => {
         })
     })
 
-    describe.only('Orchestration', () => {
+    describe('Orchestration', () => {
         const form: IDirectChargeCreateForm = {
             amount: 2000,
             currency: 'NGN',
@@ -383,6 +384,39 @@ describe('API Spec', () => {
             expect(response.data).toBeDefined()
             expect(Array.isArray(response.data)).toBe(true)
             expect(response.meta).toBeDefined()
+        })
+    })
+
+    describe.only('Refunds', () => {
+        it('should create a refund', async () => {
+            const refund = await flutterwave.api.refunds.create({
+                charge_id: chargeId,
+                amount: 10.00,
+                reason: 'requested_by_customer'
+            }, traceId)
+
+            expect(refund).toBeDefined()
+            expect(refund.id).toBeDefined()
+            expect(refund.amount_refunded).toBe(10.00)
+
+            refundId = refund.id
+        })
+
+        it('should list refunds', async () => {
+            const refunds = await flutterwave.api.refunds.list({}, traceId)
+
+            expect(refunds).toBeDefined()
+            expect(Array.isArray(refunds.data)).toBe(true)
+        })
+
+        it('should retrieve a refund by id', async () => {
+            const refund = await flutterwave.api.refunds.retrieve(
+                refundId,
+                traceId
+            )
+
+            expect(refund).toBeDefined()
+            expect(refund.id).toBe(refundId)
         })
     })
 })

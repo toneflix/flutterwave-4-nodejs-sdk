@@ -1,9 +1,4 @@
-import { BaseListQueryParams, XGenericObject } from '../Interfaces'
-
-export interface ChargebacksListQueryParams extends BaseListQueryParams {
-    from?: string
-    to?: string
-}
+import { XGenericObject } from '../Interfaces'
 
 export interface ChargebackCreateFormData {
     type: 'international' | 'local',

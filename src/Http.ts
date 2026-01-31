@@ -82,10 +82,55 @@ export class Http {
             'Content-Type': 'application/json',
         })
 
-        return axios.create({
+        const instance = axios.create({
             baseURL: Builder.baseUrl(),
             headers: this.getHeaders(),
         })
+
+        if (Http.debugLevel > 0) {
+            instance.interceptors.request.use(request => {
+                console.log('Starting Request', JSON.stringify({
+                    url: request.url,
+                    method: request.method,
+                    // Remove auth token from logs for security
+                    headers: Http.debugLevel < 3 ? Object.fromEntries(
+                        Object.entries(request.headers || {}).filter(([key]) => key.toLowerCase() !== 'authorization')
+                    ) : request.headers,
+                    params: request.params,
+                    data: request.data,
+                }, null, 2))
+
+                return request
+            }, error => {
+                console.log('Request Error:', JSON.stringify(error, null, 2))
+
+                return Promise.reject(error)
+            })
+
+            instance.interceptors.response.use(response => {
+                console.log('Response:', JSON.stringify({
+                    status: response.status,
+                    // Remove auth token from logs for security
+                    data: Http.debugLevel < 3 ? Object.fromEntries(
+                        Object.entries(response.data || {}).filter(([key]) => key.toLowerCase() !== 'access_token')
+                    ) : response.data,
+                }, null, 2))
+
+                return response
+            }, error => {
+                console.log('Response Error:', JSON.stringify({
+                    status: error.response?.status,
+                    // Remove auth token from logs for security
+                    data: Object.fromEntries(
+                        Object.entries(error.response?.data || {}).filter(([key]) => key.toLowerCase() !== 'access_token')
+                    ),
+                }, null, 2))
+
+                return Promise.reject(error)
+            })
+        }
+
+        return instance
     }
 
     /**

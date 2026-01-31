@@ -71,7 +71,7 @@ export type PaymentMethodType =
     | 'card' | 'bank_account' | 'mobile_money' | 'opay'
     | 'applepay' | 'googlepay' | 'ussd' | 'bank_transfer';
 
-export interface ICard {
+export interface IPmCard {
     type: 'card',
     card: {
         expiry_month: string
@@ -91,7 +91,7 @@ export interface ICard {
     }
 }
 
-export interface ITransfer {
+export interface IPmTransfer {
     type: 'transfer',
     transfer: {
         account_expires_in: string
@@ -103,35 +103,35 @@ export interface ITransfer {
     }
 }
 
-export interface IApplePay {
+export interface IPmApplePay {
     type: 'applepay',
     applepay: {
         card_holder_name: string
     }
 }
 
-export interface IGooglePay {
+export interface IPmGooglePay {
     type: 'googlepay',
     googlepay: {
         card_holder_name: string
     }
 }
 
-export interface IUssd {
+export interface IPmUssd {
     type: 'ussd',
     ussd: {
         account_bank: string
     }
 }
 
-export interface IOpay {
+export interface IPmOpay {
     type: 'opay',
     opay: {
         [opay: string]: any
     }
 }
 
-export interface IBankAccount {
+export interface IPmBankAccount {
     type: 'bank_account',
     bank_account: {
         [bank_account: string]: any
@@ -139,7 +139,7 @@ export interface IBankAccount {
 }
 
 
-export interface IMobileMoney {
+export interface IPmMobileMoney {
     type: 'mobile_money',
     mobile_money: {
         network: string
@@ -159,12 +159,12 @@ export interface IBasePaymentMethod {
 }
 
 export type IPaymentMethod = IBasePaymentMethod & (
-    ICard | ITransfer | IApplePay | IGooglePay | IUssd | IOpay | IBankAccount | IMobileMoney
+    IPmCard | IPmTransfer | IPmApplePay | IPmGooglePay | IPmUssd | IPmOpay | IPmBankAccount | IPmMobileMoney
 );
 
 export type IPaymentMethodCreateFormData = Omit<
     Partial<IBasePaymentMethod>, 'id' | 'device_fingerprint' | 'client_ip' | 'created_datetime'
-> & (ITransfer | IApplePay | IGooglePay | IUssd | IOpay | IBankAccount | IMobileMoney | {
+> & (IPmTransfer | IPmApplePay | IPmGooglePay | IPmUssd | IPmOpay | IPmBankAccount | IPmMobileMoney | {
     type: 'card',
     card: IPaymentCard
 })

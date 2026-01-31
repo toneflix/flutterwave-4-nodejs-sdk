@@ -1,4 +1,7 @@
+import { BasicListQueryParams, ISettlement, PageInfoMeta } from '../Contracts'
+
 import { Flutterwave } from '../Flutterwave'
+import { Http } from '../Http'
 
 export class Settlements {
     #flutterwave: Flutterwave
@@ -12,7 +15,21 @@ export class Settlements {
      * 
      * @method GET
      */
-    list () { }
+    async list (
+        query: BasicListQueryParams = {},
+        traceId?: string
+    ): Promise<{ data: ISettlement[], meta: PageInfoMeta }> {
+        await this.#flutterwave.ensureTokenIsValid()
+
+        const { data, meta } = await Http.send<ISettlement[], PageInfoMeta>(
+            this.#flutterwave.builder.buildTargetUrl('/settlements', {}, query),
+            'GET',
+            {},
+            { 'X-Trace-Id': traceId }
+        )
+
+        return { data, meta: meta! }
+    }
 
     /**
      * Retrieve a settlement
@@ -20,5 +37,19 @@ export class Settlements {
      * @param id 
      * @method GET
      */
-    retrieve (id: string) { }
+    async retrieve (
+        id: string,
+        traceId?: string
+    ): Promise<ISettlement> {
+        await this.#flutterwave.ensureTokenIsValid()
+
+        const { data } = await Http.send<ISettlement>(
+            this.#flutterwave.builder.buildTargetUrl('/settlements/{id}', { id }),
+            'GET',
+            {},
+            { 'X-Trace-Id': traceId }
+        )
+
+        return data
+    }
 }

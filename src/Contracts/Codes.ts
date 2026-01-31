@@ -21,3 +21,10 @@ export type CountryCode =
 export type CountryCodeRestricted =
     | 'CG' | 'CM' | 'CI' | 'EG' | 'ET' | 'GA' | 'GH' | 'KE' | 'MW' | 'RW' | 'SN' | 'TZ' | 'TD'
     | 'UG' | 'ZM'
+
+export type ProviderResponseCode =
+    | 'transfer_amount_exceeds_limit' | 'transfer_amount_below_limit' | 'monthly_transfer_limit_exceeded'
+    | 'daily_transfer_limit_exceeded' | 'transfer_limit_not_set_for_currency' | 'payout_creation_failed'
+    | 'insufficient_balance' | 'service_unavailable' | 'transfer_failed' | 'pricing_not_set'
+    | 'currency_conversion_not_set' | 'rejected_recipient_merchant' | 'invalid_bank_code'
+    | 'unable_to_determine_country' | 'invalid_wallet_currency'

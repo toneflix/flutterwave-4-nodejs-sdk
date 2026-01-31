@@ -1,5 +1,6 @@
-import { ChargebackCreateFormData, ChargebackUpdateFormData, ChargebacksApiResponse, ChargebacksListQueryParams } from '../Contracts/Api/ChargebacksApi'
+import { ChargebackCreateFormData, ChargebackUpdateFormData, ChargebacksApiResponse } from '../Contracts/Api/ChargebacksApi'
 
+import { BasicListQueryParams } from '../Contracts'
 import { ChargebacksMeta } from '../Contracts/Api/ChargesApi'
 import { Flutterwave } from '../Flutterwave'
 import { Http } from '../Http'
@@ -18,7 +19,7 @@ export class Chargebacks {
      * @method GET
      */
     async list (
-        query: ChargebacksListQueryParams = {},
+        query: BasicListQueryParams = {},
         traceId?: string
     ): Promise<{ data: ChargebacksApiResponse[], meta: ChargebacksMeta }> {
 

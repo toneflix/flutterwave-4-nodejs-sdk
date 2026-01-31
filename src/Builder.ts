@@ -123,16 +123,24 @@ export class Builder {
      * @param card 
      * @returns 
      */
-    static async encryptCardDetails (card: CardDetails): Promise<EncryptedCardDetails & CardDetails> {
+    static async encryptCardDetails (card: Partial<CardDetails>): Promise<EncryptedCardDetails & CardDetails> {
         const nonce = crypto.randomBytes(12).toString('base64').slice(0, 12)
 
-        return {
+        const encrypted = {
             nonce: nonce,
-            encrypted_expiry_month: await this.encryptAES(card.expiry_month, process.env.ENCRYPTION_KEY!, nonce),
-            encrypted_expiry_year: await this.encryptAES(card.expiry_year, process.env.ENCRYPTION_KEY!, nonce),
-            encrypted_card_number: await this.encryptAES(card.card_number, process.env.ENCRYPTION_KEY!, nonce),
-            encrypted_cvv: await this.encryptAES(card.cvv, process.env.ENCRYPTION_KEY!, nonce)
+            encrypted_expiry_month: await this.encryptAES(card.expiry_month!, process.env.ENCRYPTION_KEY!, nonce),
+            encrypted_expiry_year: await this.encryptAES(card.expiry_year!, process.env.ENCRYPTION_KEY!, nonce),
+            encrypted_card_number: await this.encryptAES(card.card_number!, process.env.ENCRYPTION_KEY!, nonce),
+            encrypted_cvv: await this.encryptAES(card.cvv!, process.env.ENCRYPTION_KEY!, nonce)
         } as never
+
+
+        delete card.expiry_month
+        delete card.expiry_year
+        delete card.card_number
+        delete card.cvv
+
+        return encrypted
     }
 
     /**
