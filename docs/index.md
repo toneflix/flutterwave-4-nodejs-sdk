@@ -17,39 +17,48 @@ hero:
       link: https://github.com/toneflix/flutterwave-4-nodejs-sdk
 
 features:
-  - icon: 🚀
+  - icon:
+      src: /archive-stack-fill.svg
     title: Full API Coverage
     details: Support for all documented Flutterwave v4 endpoints including transfers, virtual accounts, wallets, and more.
 
-  - icon: 🔒
+  - icon:
+      src: /safe-2-fill.svg
     title: Type-Safe
     details: Written in TypeScript with comprehensive type definitions for better developer experience.
 
-  - icon: 🎯
+  - icon:
+      src: /code-box-fill.svg
     title: Intuitive API
     details: Clean and easy-to-use interface with promise-based async/await support.
 
-  - icon: 📦
+  - icon:
+      src: /box-3-fill.svg
     title: Lightweight
     details: Minimal dependencies with a small footprint for fast installation and execution.
 
-  - icon: 🛡️
+  - icon:
+      src: /shield-check-fill.svg
     title: Error Handling
     details: Comprehensive error handling with custom exceptions for different scenarios.
 
-  - icon: 🔄
+  - icon:
+      src: /refresh-fill.svg
     title: Auto Authentication
     details: Automatic token management and refresh - no need to worry about authentication.
 
-  - icon: 🎨
+  - icon:
+      src: /painting-fill.svg
     title: Developer Friendly
     details: Great IntelliSense support with detailed JSDoc comments and type hints.
 
-  - icon: ⚡
+  - icon:
+      src: /flashlight-fill.svg
     title: Modern Stack
     details: Built with modern JavaScript/TypeScript features and best practices.
 
-  - icon: 📖
+  - icon:
+      src: /book-open-fill.svg
     title: Well Documented
     details: Comprehensive documentation with examples for every API endpoint.
 ---
