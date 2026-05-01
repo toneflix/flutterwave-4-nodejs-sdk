@@ -22,6 +22,14 @@
       "import": "./dist/contracts.js",
       "require": "./dist/contracts.cjs"
     },
+    "./v3": {
+      "import": "./dist/v3/index.js",
+      "require": "./dist/v3/index.cjs"
+    },
+    "./v3/contracts": {
+      "import": "./dist/v3/contracts.js",
+      "require": "./dist/v3/contracts.cjs"
+    },
     "./package.json": "./package.json"
   },
   "files": [

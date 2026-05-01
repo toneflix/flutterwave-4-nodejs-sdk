@@ -2,6 +2,10 @@ import { FlutterwaveErrorType, FlutterwaveErrorValue } from './Errors'
 
 import { XGenericObject } from './Interfaces'
 
+export type FlutterwaveEnvironment = 'sandbox' | 'live'
+
+export type FlutterwaveApiVersion = 'v4' | (string & {})
+
 export type FlutterwaveResponseStatus = 'failed' | 'success'
 
 export interface FlutterwaveValidationError {
@@ -100,5 +104,9 @@ export interface InitOptions {
     /**     
      * Environment to use
      */
-    environment?: 'sandbox' | 'live'
+    environment?: FlutterwaveEnvironment
+    /**
+     * API family/version to use. Defaults to v4.
+     */
+    apiVersion?: FlutterwaveApiVersion
 }

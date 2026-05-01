@@ -1,12 +1,18 @@
 import './utilities/global'
 
-import { FlutterwaveAuthResponse, InitOptions } from './Contracts/FlutterwaveCore'
+import { FlutterwaveApiVersion, FlutterwaveAuthResponse, FlutterwaveEnvironment, InitOptions } from './Contracts/FlutterwaveCore'
 
+import { ApiVersionConfig } from './Builder'
 import { BaseApi } from './Apis/BaseApi'
 import { Builder } from './Builder'
 import { Http } from './Http'
+import { V3Api } from './v3/Apis/V3Api'
+
+export type FlutterwaveApiInitializer<TApi extends BaseApi = BaseApi> = (flutterwave: Flutterwave) => TApi
 
 export class Flutterwave {
+    private static apiInitializers: Record<string, FlutterwaveApiInitializer> = {}
+
     debugLevel = 0
 
     /**
@@ -22,7 +28,12 @@ export class Flutterwave {
     /**
      * Flutterwave Environment
      */
-    private environment: 'sandbox' | 'live' = 'live'
+    private environment: FlutterwaveEnvironment = 'live'
+
+    /**
+     * Flutterwave API version
+     */
+    private apiVersion: FlutterwaveApiVersion = 'v4'
 
     /**
      * Encryption Key
@@ -50,9 +61,14 @@ export class Flutterwave {
     api: BaseApi
 
     /**
+     * Flutterwave v3 API instance
+     */
+    v3: V3Api
+
+    /**
      * Builder Instance
      */
-    builder = Builder
+    builder: Builder
 
     /**
      * Creates an instance of Flutterwave.
@@ -62,26 +78,73 @@ export class Flutterwave {
      * @param encryptionKey 
      */
     constructor(clientId?: InitOptions)
-    constructor(clientId?: string, clientSecret?: string, encryptionKey?: string, env?: 'sandbox' | 'live')
-    constructor(clientId?: string | InitOptions, clientSecret?: string, encryptionKey?: string, env?: 'sandbox' | 'live') {
+    constructor(
+        clientId?: string,
+        clientSecret?: string,
+        encryptionKey?: string,
+        env?: FlutterwaveEnvironment,
+        apiVersion?: FlutterwaveApiVersion
+    )
+    constructor(
+        clientId?: string | InitOptions,
+        clientSecret?: string,
+        encryptionKey?: string,
+        env?: FlutterwaveEnvironment,
+        apiVersion?: FlutterwaveApiVersion
+    ) {
         if (typeof clientId === 'object') {
             this.clientId = clientId.clientId
             this.clientSecret = clientId.clientSecret
             this.encryptionKey = clientId.encryptionKey ?? process.env.ENCRYPTION_KEY
             this.environment = clientId.environment ?? 'live'
+            this.apiVersion = clientId.apiVersion ?? 'v4'
         } else {
             this.clientId = clientId ?? process.env.CLIENT_ID ?? ''
             this.clientSecret = clientSecret ?? process.env.CLIENT_SECRET ?? ''
             this.encryptionKey = encryptionKey ?? process.env.ENCRYPTION_KEY
-            this.environment = env ?? (process.env.ENVIRONMENT ?? 'live') as 'sandbox' | 'live'
+            this.environment = env ?? (process.env.ENVIRONMENT ?? 'live') as FlutterwaveEnvironment
+            this.apiVersion = apiVersion ?? 'v4'
         }
 
         if (!this.clientId || !this.clientSecret) {
             throw new Error('Client ID and Client Secret are required to initialize Flutterwave instance')
         }
 
-        this.builder.setEnvironment(this.environment)
-        this.api = BaseApi.initialize(this)
+        Builder.setEnvironment(this.environment)
+        Builder.setApiVersion(this.apiVersion)
+        this.builder = new Builder(this.environment, this.apiVersion)
+        this.v3 = new V3Api(this)
+        this.api = Flutterwave.initializeApi(this)
+    }
+
+    /**
+     * Register an API version/family and the API root that should initialize it.
+     *
+     * @param version
+     * @param initializer
+     * @param config
+     */
+    static registerApiVersion (
+        version: FlutterwaveApiVersion,
+        initializer: FlutterwaveApiInitializer,
+        config: ApiVersionConfig
+    ) {
+        Builder.registerApiVersion(version, config)
+        this.apiInitializers[version] = initializer
+    }
+
+    private static initializeApi (flutterwave: Flutterwave) {
+        if (flutterwave.getApiVersion() === 'v4') {
+            return BaseApi.initialize(flutterwave)
+        }
+
+        const initializer = this.apiInitializers[flutterwave.getApiVersion()]
+
+        if (!initializer) {
+            throw new Error(`API version "${flutterwave.getApiVersion()}" has not been registered`)
+        }
+
+        return initializer(flutterwave)
     }
 
     /**
@@ -94,13 +157,26 @@ export class Flutterwave {
      * @returns 
      */
     init (clientId?: InitOptions): Flutterwave
-    init (clientId?: string, clientSecret?: string, encryptionKey?: string, env?: 'sandbox' | 'live'): Flutterwave
-    init (clientId?: any, clientSecret?: string, encryptionKey?: string, env?: 'sandbox' | 'live'): Flutterwave {
+    init (
+        clientId?: string,
+        clientSecret?: string,
+        encryptionKey?: string,
+        env?: FlutterwaveEnvironment,
+        apiVersion?: FlutterwaveApiVersion
+    ): Flutterwave
+    init (
+        clientId?: any,
+        clientSecret?: string,
+        encryptionKey?: string,
+        env?: FlutterwaveEnvironment,
+        apiVersion?: FlutterwaveApiVersion
+    ): Flutterwave {
         return new Flutterwave(
             clientId,
             clientSecret,
             encryptionKey,
-            env
+            env,
+            apiVersion
         )
     }
 
@@ -134,6 +210,15 @@ export class Flutterwave {
      */
     getEnvironment () {
         return this.environment
+    }
+
+    /**
+     * Get the current API version
+     *
+     * @returns
+     */
+    getApiVersion () {
+        return this.apiVersion
     }
 
     /**

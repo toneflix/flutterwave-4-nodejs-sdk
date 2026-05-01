@@ -6,6 +6,8 @@ export default defineConfig([
         entry: {
             index: 'src/index.ts',
             contracts: 'src/Contracts/index.ts',
+            'v3/index': 'src/v3/index.ts',
+            'v3/contracts': 'src/contracts/v3/index.ts',
         },
         exports: true,
         format: ['esm', 'cjs'],

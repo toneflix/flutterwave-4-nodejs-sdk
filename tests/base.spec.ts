@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
+import { BaseApi } from '../src/Apis/BaseApi'
 import { Builder } from '../src/Builder'
 import { Flutterwave } from '../src'
 import { WebhookValidator } from '../src/utilities/WebhookValidator'
@@ -88,6 +89,24 @@ describe('Base Spec', () => {
             expect(targetUrl).toBe('https://api.flutterwave.com/v4/transactions/12345/details?include=all&verbose=true')
         })
 
+        it('should register and use another api version', () => {
+            Builder.registerApiVersion('beta', {
+                baseUrls: {
+                    live: 'https://api.flutterwave.com/beta/',
+                    sandbox: 'https://developersandbox-api.flutterwave.com/beta/',
+                },
+            })
+
+            Builder.setEnvironment('sandbox')
+            Builder.setApiVersion('beta')
+
+            expect(Builder.baseUrl()).toBe('https://developersandbox-api.flutterwave.com/beta/')
+            expect(Builder.buildTargetUrl('/transactions/{transactionId}', { transactionId: 12345 }))
+                .toBe('https://developersandbox-api.flutterwave.com/beta/transactions/12345')
+
+            Builder.setApiVersion('v4')
+        })
+
         it('should encrypt card details', async () => {
             const cardDetails = {
                 expiry_month: '12',
@@ -173,6 +192,90 @@ describe('Base Spec', () => {
             expect(flutterwaveInstance).toBeInstanceOf(Flutterwave)
             expect(flutterwaveInstance.getEnvironment()).toBe('sandbox')
             expect(Builder.baseUrl()).toContain('developersandbox-api.flutterwave.com')
+        })
+
+        it('should initialize Flutterwave instance with registered api version', () => {
+            class BetaApi extends BaseApi {
+                beta = true
+            }
+
+            Flutterwave.registerApiVersion(
+                'beta-client',
+                flutterwave => new BetaApi(flutterwave),
+                {
+                    baseUrls: {
+                        live: 'https://api.flutterwave.com/beta/',
+                        sandbox: 'https://developersandbox-api.flutterwave.com/beta/',
+                    },
+                }
+            )
+
+            const flutterwaveInstance = new Flutterwave({
+                clientId: 'test_client_id',
+                clientSecret: 'test_client_secret',
+                environment: 'sandbox',
+                apiVersion: 'beta-client',
+            })
+
+            expect(flutterwaveInstance.getApiVersion()).toBe('beta-client')
+            expect(Builder.baseUrl()).toBe('https://developersandbox-api.flutterwave.com/beta/')
+            expect((flutterwaveInstance.api as BetaApi).beta).toBe(true)
+
+            Builder.setApiVersion('v4')
+        })
+
+        it('should keep api version url building scoped to each instance', () => {
+            Flutterwave.registerApiVersion(
+                'isolated-beta',
+                BaseApi.initialize,
+                {
+                    baseUrls: {
+                        live: 'https://api.flutterwave.com/beta/',
+                        sandbox: 'https://developersandbox-api.flutterwave.com/beta/',
+                    },
+                }
+            )
+
+            const betaClient = new Flutterwave({
+                clientId: 'test_client_id',
+                clientSecret: 'test_client_secret',
+                environment: 'sandbox',
+                apiVersion: 'isolated-beta',
+            })
+
+            const v4Client = new Flutterwave({
+                clientId: 'test_client_id',
+                clientSecret: 'test_client_secret',
+                environment: 'live',
+            })
+
+            expect(betaClient.builder.buildTargetUrl('/banks')).toBe('https://developersandbox-api.flutterwave.com/beta/banks')
+            expect(v4Client.builder.buildTargetUrl('/banks')).toBe('https://api.flutterwave.com/v4/banks')
+        })
+
+        it('should use a previous api version when registered', () => {
+            Flutterwave.registerApiVersion(
+                'v3',
+                BaseApi.initialize,
+                {
+                    baseUrls: {
+                        live: 'https://api.flutterwave.com/v3/',
+                        sandbox: 'https://api.flutterwave.com/v3/',
+                    },
+                }
+            )
+
+            const flutterwaveInstance = new Flutterwave({
+                clientId: 'test_client_id',
+                clientSecret: 'test_client_secret',
+                environment: 'live',
+                apiVersion: 'v3',
+            })
+
+            expect(flutterwaveInstance.getApiVersion()).toBe('v3')
+            expect(flutterwaveInstance.api.banks).toBeDefined()
+            expect(flutterwaveInstance.builder.buildTargetUrl('/banks/{country}', { country: 'NG' }))
+                .toBe('https://api.flutterwave.com/v3/banks/NG')
         })
 
         it('should initialize Flutterwave instance with individual parameters', () => {

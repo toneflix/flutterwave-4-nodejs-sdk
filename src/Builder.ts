@@ -1,31 +1,77 @@
 import './utilities/global'
 
 import { CardDetails, EncryptedCardDetails } from './Contracts'
+import { FlutterwaveApiVersion, FlutterwaveEnvironment } from './Contracts/FlutterwaveCore'
 
 import { XGenericObject } from './Contracts/Interfaces'
 import { buildUrl } from './utilities/helpers'
 import crypto from 'crypto'
 
+export interface ApiVersionConfig {
+    baseUrls: Record<FlutterwaveEnvironment, string>
+}
+
 export class Builder {
-    private static baseUrls = {
-        live: 'https://api.flutterwave.com/v4/',
-        sandbox: 'https://developersandbox-api.flutterwave.com/',
+    private static apiVersions: Record<string, ApiVersionConfig> = {
+        v4: {
+            baseUrls: {
+                live: 'https://api.flutterwave.com/v4/',
+                sandbox: 'https://developersandbox-api.flutterwave.com/',
+            },
+        },
+        v3: {
+            baseUrls: {
+                live: 'https://api.flutterwave.com/v3/',
+                sandbox: 'https://api.flutterwave.com/v3/',
+            },
+        },
     }
 
     /**
      * Flutterwave Environment
      */
-    static environment?: 'sandbox' | 'live'
+    static environment?: FlutterwaveEnvironment
 
-    constructor() { }
+    /**
+     * Flutterwave API version
+     */
+    static apiVersion: FlutterwaveApiVersion = 'v4'
+
+    constructor(
+        private readonly instanceEnvironment?: FlutterwaveEnvironment,
+        private readonly instanceApiVersion: FlutterwaveApiVersion = 'v4'
+    ) { }
 
     /**
      * Sets the environment for the builder
      * 
      * @param env
      */
-    static setEnvironment (env: 'sandbox' | 'live') {
+    static setEnvironment (env: FlutterwaveEnvironment) {
         this.environment = env
+    }
+
+    /**
+     * Register an API version/family for future or beta APIs.
+     *
+     * @param version
+     * @param config
+     */
+    static registerApiVersion (version: FlutterwaveApiVersion, config: ApiVersionConfig) {
+        this.apiVersions[version] = config
+    }
+
+    /**
+     * Sets the active API version/family for the builder.
+     *
+     * @param version
+     */
+    static setApiVersion (version: FlutterwaveApiVersion) {
+        if (!this.apiVersions[version]) {
+            throw new Error(`API version "${version}" has not been registered`)
+        }
+
+        this.apiVersion = version
     }
 
     /**
@@ -33,14 +79,22 @@ export class Builder {
      * 
      * @returns 
      */
-    static baseUrl () {
-        const env = process.env.ENVIRONMENT || this.environment || 'sandbox'
+    static baseUrl (version: FlutterwaveApiVersion = this.apiVersion) {
+        return this.resolveBaseUrl(version, this.environment)
+    }
 
-        if (env === 'live') {
-            return this.baseUrls.live
+    private static resolveBaseUrl (
+        version: FlutterwaveApiVersion,
+        environment?: FlutterwaveEnvironment
+    ) {
+        const env = (environment || process.env.ENVIRONMENT || 'sandbox') as FlutterwaveEnvironment
+        const config = this.apiVersions[version]
+
+        if (!config) {
+            throw new Error(`API version "${version}" has not been registered`)
         }
 
-        return this.baseUrls.sandbox
+        return config.baseUrls[env]
     }
 
     /**
@@ -50,6 +104,14 @@ export class Builder {
      * @returns 
      */
     static buildUrl (...endpoint: string[]) {
+        return buildUrl(this.baseUrl(), ...endpoint)
+    }
+
+    baseUrl () {
+        return Builder.resolveBaseUrl(this.instanceApiVersion, this.instanceEnvironment)
+    }
+
+    buildUrl (...endpoint: string[]) {
         return buildUrl(this.baseUrl(), ...endpoint)
     }
 
@@ -76,6 +138,10 @@ export class Builder {
         }
 
         return built
+    }
+
+    buildParams (params: XGenericObject, type: 'query' | 'path' = 'path') {
+        return Builder.buildParams(params, type)
     }
 
     /**
@@ -108,6 +174,10 @@ export class Builder {
         return builtUrl
     }
 
+    assignParamsToUrl (url: string, params: XGenericObject, type: 'query' | 'path' = 'path') {
+        return Builder.assignParamsToUrl(url, params, type)
+    }
+
     /**
      * Builds the target url by assigning both path and query parameters
      * 
@@ -117,6 +187,20 @@ export class Builder {
      * @returns 
      */
     static buildTargetUrl (
+        path: string,
+        params: XGenericObject = {},
+        queryParams: XGenericObject = {}
+    ) {
+        const url = this.buildUrl(path)
+
+        let builtUrl = this.assignParamsToUrl(url, params, 'path')
+
+        builtUrl = this.assignParamsToUrl(builtUrl, queryParams, 'query')
+
+        return builtUrl
+    }
+
+    buildTargetUrl (
         path: string,
         params: XGenericObject = {},
         queryParams: XGenericObject = {}
