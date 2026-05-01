@@ -1,5 +1,11 @@
 # flutterwave-node-v4
 
+## 0.2.0
+
+### Minor Changes
+
+- feat: add v3 BVN API with verification methods and update project structure
+
 ## 0.1.0
 
 ### Initial Release
