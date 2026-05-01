@@ -29,7 +29,6 @@ The Flutterwave Node.js SDK provides a comprehensive interface to all Flutterwav
 ### Supporting Services
 
 - **[Banks](/api/banks)** - List banks, branches, and resolve account details
-- **[BVN (v3)](/api/v3-bvn)** - Retrieve BVN consent request verifications
 - **[Fees](/api/fees)** - Calculate transaction fees
 - **[Mobile Networks](/api/mobile-networks)** - Get mobile money network information
 - **[Chargebacks](/api/chargebacks)** - Manage payment disputes and chargebacks
@@ -49,14 +48,6 @@ const flutterwave = new Flutterwave({
 
 // All API calls are automatically authenticated
 const banks = await flutterwave.api.banks.list('NG');
-```
-
-### V3 APIs
-
-V3 endpoints are available through the `flutterwave.v3` object:
-
-```typescript
-const verification = await flutterwave.v3.bvn.verifications('00000000000');
 ```
 
 ### Trace IDs
