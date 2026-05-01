@@ -77,6 +77,13 @@ export default defineConfig({
                 ]
             },
             {
+                text: 'v3 API Reference',
+                items: [
+                    { text: 'Overview', link: '/api/v3/overview' },
+                    { text: 'BVN', link: '/api/v3/bvn' }
+                ]
+            },
+            {
                 text: 'Examples',
                 items: [
                     { text: 'Direct Transfers', link: '/examples/direct-transfers' },
