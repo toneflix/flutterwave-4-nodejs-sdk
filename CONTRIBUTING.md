@@ -159,7 +159,7 @@ git checkout -b docs/what-you-are-documenting
 pnpm test
 
 # Run tests in watch mode
-pnpm quick:test
+pnpm test:watch
 
 # Run specific test file
 pnpm vitest tests/api.spec.ts

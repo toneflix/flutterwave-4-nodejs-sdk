@@ -22,17 +22,17 @@ export default defineConfig([
         ],
         clean: true,
         hooks (hooks) {
-            hooks.hook('build:done', (ctx) => {
-                try {
-                    // Get the absolute output directory
-                    const outDir = ctx.options.outDir ?? 'dist'
-                    // Delete unnecessary folders or files
-                    rmSync(`${outDir}/contracts.cjs`)
-                    rmSync(`${outDir}/contracts.js`)
-                } catch (error) {
-                    console.error('Error during post-build cleanup:', error)
-                }
-            })
+            // hooks.hook('build:done', (ctx) => {
+            //     try {
+            //         // Get the absolute output directory
+            //         const outDir = ctx.options.outDir ?? 'dist'
+            //         // Delete unnecessary folders or files
+            //         rmSync(`${outDir}/contracts.cjs`)
+            //         rmSync(`${outDir}/contracts.mjs`)
+            //     } catch (error) {
+            //         console.error('Error during post-build cleanup:', error)
+            //     }
+            // })
         },
     },
 ]) 
